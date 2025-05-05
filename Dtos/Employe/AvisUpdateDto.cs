@@ -7,7 +7,7 @@ namespace BackOnWay.Dtos.Employe
         [Required]
         public int AvisId { get; set; }
 
-        [Required]
+        [Required(ErrorMessage = "Le statut est requis.")]
         public string AvisStatut { get; set; }
     }
 }

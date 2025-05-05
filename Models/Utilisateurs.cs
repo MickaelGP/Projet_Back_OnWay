@@ -12,27 +12,21 @@ namespace BackOnWay.Models
         /// <summary>
         /// Psuedo de l'utilisateur
         /// </summary>
-        [StringLength(30, ErrorMessage = "Le nombre de caractère ne doit pas dépasser 30.")]
         public string UtilPseudo { get; set; }
 
         /// <summary>
         /// Prénom de l'utilisateur
         /// </summary>
-        [Required(ErrorMessage = "Le prénom est requis.")]
-        [StringLength(50, ErrorMessage = "Le nombre de caractère ne doit pas dépasser 50.")]
         public string UtilPrenom { get; set; }
 
         /// <summary>
         /// Nom de l'utilisateur
         /// </summary>
-        [Required(ErrorMessage = "Le nom est requis.")]
-        [StringLength(50, ErrorMessage = "Le nombre de caractère ne doit pas dépasser 12.")]
         public string UtilNom { get; set; }
 
         /// <summary>
         /// Date de naissance de l'utilisateur
         /// </summary>
-        [Required(ErrorMessage = "La date de naissance est requise.")]
         public DateOnly UtilNaissance { get; set; }
 
         /// <summary>
@@ -49,22 +43,16 @@ namespace BackOnWay.Models
         /// <summary>
         /// Adresse email de l'utilisateur
         /// </summary>
-        //[EmailAddress(ErrorMessage = "Adresse email invalide")]
-        //[RegularExpression("/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/", ErrorMessage = "Format invalide")]
         public string UtilEmail { get; set; }
 
         /// <summary>
         /// Téléphone de l'utilisateur
         /// </summary>
-        //[Required(ErrorMessage = "Le numéros de téléphone est requis.")]
-        //[RegularExpression("/^((\\+|00)33\\s?|0)[67](\\s?\\d{2}){4}$/", ErrorMessage = "Format invalide")]
         public string UtilTelephone { get; set; }
 
         /// <summary>
         /// Mot de passe de l'utilisateur 
         /// </summary>
-        //[Required(ErrorMessage = "Le mot de passe est requis.")]
-        //[RegularExpression("/^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[\\W_])[A-Za-z\\d\\W_]{8,}$/", ErrorMessage = "Format invalide")]
         public string UtilMdp { get; set; }
 
         /// <summary>
@@ -90,9 +78,16 @@ namespace BackOnWay.Models
         //Avis
         public Avis Avis { get; set; }
 
-        //
+        /// <summary>
+        /// Note recu
+        /// </summary>
         public double Note { get; set; }
+
+        /// <summary>
+        /// Nombre de commentaire
+        /// </summary>
         public int NombreCom { get; set; }
+
         /// <summary>
         /// Constructeur par défault
         /// </summary>

@@ -13,8 +13,6 @@ namespace BackOnWay.Models
         /// <summary>
         /// Nom du rôle
         /// </summary>
-        [Required(ErrorMessage = "Le nom du rôle est requis.")]
-        [StringLength(15, ErrorMessage = "Le champ doit comporter 15 caractères au maximum")]
         public string RoleLabel { get; set; }
 
         public Roles() { }
