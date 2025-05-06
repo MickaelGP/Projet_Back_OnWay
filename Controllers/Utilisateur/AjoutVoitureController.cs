@@ -12,7 +12,7 @@ namespace BackOnWay.Controllers.Utilisateur
         private AjoutVoitureMetier _metier = new AjoutVoitureMetier();
 
         [HttpPost]
-        public IActionResult InsertVoiture(InsertVoitureDto unVoiture)
+        public IActionResult InsertVoiture([FromBody] InsertVoitureDto unVoiture)
         {
             bool resultat = _metier.InsertVoiture(unVoiture);
 

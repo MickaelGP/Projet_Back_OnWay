@@ -56,13 +56,13 @@ namespace BackOnWay.Models
         /// <summary>
         /// Identifiant de l'adresse de départ
         /// </summary>
-        //public int DepartAdresse { get; set; }
+        public int DepAdresse { get; set; }
         public Adresses DepartAdresse { get; set; }
 
         /// <summary>
         /// Identifiant de l'adresse d'arrivée
         /// </summary>
-        //public int ArriveAdresse { get; set; }
+        public int ArrAdresse { get; set; }
         public Adresses ArriveAdresse { get; set; }
 
         public Covoiturages() { }
