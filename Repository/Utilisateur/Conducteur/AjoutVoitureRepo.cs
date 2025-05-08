@@ -2,7 +2,7 @@
 using BackOnWay.Models;
 using Microsoft.Data.SqlClient;
 
-namespace BackOnWay.Repository.Utilisateur
+namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
     public class AjoutVoitureRepo
     {
@@ -25,6 +25,75 @@ namespace BackOnWay.Repository.Utilisateur
             _connexion = maConnexion.GetConnection();
         }
 
+        /// <summary>
+        /// Récupère toutes les couleurs qui existent en BDD
+        /// </summary>
+        /// <returns>Une liste de couleurs</returns>
+        public List<Couleurs> GetAllCouleurs()
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                DbConnecter();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "SELECT * FROM couleurs";
+
+            List<Couleurs> listeCouleurs = new List<Couleurs>();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Couleurs unCouleur = new Couleurs
+                {
+                    CouleurId = (int)reader["CouleurId"],
+                    CouleurNom = reader["CouleurNom"].ToString()
+                };
+                listeCouleurs.Add(unCouleur);
+            }
+            reader.Close();
+
+            _connexion.Close();
+
+            return listeCouleurs;
+        }
+
+        /// <summary>
+        /// Récupère tout les modèles de voitures qui existe en BDD
+        /// </summary>
+        /// <returns>Une liste de modéles</returns>
+        public List<Modeles> GetAllModeles()
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                DbConnecter();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "SELECT * FROM modeles";
+
+            List<Modeles> listeModeles = new List<Modeles>();
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                Modeles modeles = new Modeles
+                {
+                    ModeleId = (int)reader["ModeleId"],
+                    ModeleNom = reader["ModeleNom"].ToString()
+                };
+                listeModeles.Add(modeles);
+            }
+            reader.Close();
+
+            _connexion.Close();
+
+            return listeModeles;
+        }
         /// <summary>
         /// Insère un véhicule dans la base de données.
         /// </summary>
@@ -59,7 +128,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
         }
@@ -88,7 +157,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
 
@@ -122,7 +191,7 @@ namespace BackOnWay.Repository.Utilisateur
             }
             reader.Close();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
         }

@@ -1,9 +1,9 @@
 ﻿using BackOnWay.Dtos.Utilisateur;
-using BackOnWay.Metier.Utilisateur;
+using BackOnWay.Metier.Utilisateur.Conducteur;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
-namespace BackOnWay.Controllers.Utilisateur
+namespace BackOnWay.Controllers.Utilisateur.Conducteur
 {
     [Route("[controller]")]
     [ApiController]

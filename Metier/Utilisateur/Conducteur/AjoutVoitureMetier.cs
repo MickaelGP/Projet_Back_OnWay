@@ -1,12 +1,34 @@
 ﻿using BackOnWay.Dtos.Utilisateur;
 using BackOnWay.Models;
-using BackOnWay.Repository.Utilisateur;
+using BackOnWay.Repository.Utilisateur.Conducteur;
 
-namespace BackOnWay.Metier.Utilisateur
+namespace BackOnWay.Metier.Utilisateur.Conducteur
 {
     public class AjoutVoitureMetier
     {
         private AjoutVoitureRepo _repo = new AjoutVoitureRepo();
+
+        /// <summary>
+        /// Gère la récupération de tous les modèles de voitures.
+        /// </summary>
+        /// <returns>Liste de modéles de voitures</returns>
+        public List<Modeles> GetAllModeles()
+        {
+            List<Modeles> listModeles = _repo.GetAllModeles();
+
+            return listModeles;
+        }
+
+        /// <summary>
+        /// Gère la récupération de toutes les couleurs.
+        /// </summary>
+        /// <returns>Liste de couleurs</returns>
+        public List<Couleurs> GetAllCouleurs()
+        {
+            List<Couleurs> listeCouleurs = _repo.GetAllCouleurs();
+
+            return listeCouleurs;
+        }
 
         /// <summary>
         /// Gère la logique métier liée à l'ajout d'une voiture pour un utilisateur.

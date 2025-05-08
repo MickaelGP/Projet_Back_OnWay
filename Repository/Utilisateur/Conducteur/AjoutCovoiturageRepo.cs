@@ -2,7 +2,7 @@
 using BackOnWay.Models;
 using Microsoft.Data.SqlClient;
 
-namespace BackOnWay.Repository.Utilisateur
+namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
     public class AjoutCovoiturageRepo
     {
@@ -57,7 +57,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int reponse = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return reponse;
         }
@@ -82,7 +82,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
         }
@@ -110,7 +110,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
         }
@@ -131,7 +131,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = Convert.ToInt32(cmd.ExecuteScalar());
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return resultat;
         }
@@ -165,7 +165,7 @@ namespace BackOnWay.Repository.Utilisateur
                 reponse = (int)resultat;
             }
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return reponse;
         }
@@ -207,7 +207,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             reader.Close();
 
-            this._connexion.Close();
+            _connexion.Close();
 
             return listeVoitures;
         }

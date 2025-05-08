@@ -1,8 +1,8 @@
 ﻿using BackOnWay.Dtos.Utilisateur;
 using BackOnWay.Models;
-using BackOnWay.Repository.Utilisateur;
+using BackOnWay.Repository.Utilisateur.Conducteur;
 
-namespace BackOnWay.Metier.Utilisateur
+namespace BackOnWay.Metier.Utilisateur.Conducteur
 {
     public class AjoutCovoiturageMetier
     {
