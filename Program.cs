@@ -1,4 +1,11 @@
+using BackOnWay.Metier.Utilisateur.Conducteur;
+using BackOnWay.Repository.Utilisateur.Conducteur;
+
 var builder = WebApplication.CreateBuilder(args);
+
+// Ajout pour injection de dépendances
+builder.Services.AddScoped<ICovoiturageRepo, CovoiturageRepo>();
+builder.Services.AddScoped<ICovoiturageMetier, CovoiturageMetier>();
 
 // Add services to the container.
 
