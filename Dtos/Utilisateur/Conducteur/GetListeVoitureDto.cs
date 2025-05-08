@@ -1,4 +1,4 @@
-﻿namespace BackOnWay.Dtos.Utilisateur
+﻿namespace BackOnWay.Dtos.Utilisateur.Conducteur
 {
     public class GetListeVoitureDto
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BackOnWay.Dtos.Utilisateur
+namespace BackOnWay.Dtos.Utilisateur.Conducteur
 {
     public class InsertCovoiturageDto
     {
