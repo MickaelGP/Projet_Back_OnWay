@@ -5,5 +5,7 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
     public interface ICovoiturageMetier
     {
         List<GetListeCovoitByUtilIdDto> GetAllCovoitByUtilId(int unId);
+
+        bool DeleteCovoitById(int unId);
     }
 }

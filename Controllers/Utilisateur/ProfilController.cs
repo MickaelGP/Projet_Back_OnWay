@@ -68,7 +68,7 @@ namespace BackOnWay.Controllers.Utilisateur
 
             if (!resultat)
             {
-                return StatusCode(500, "Une erreur s'est produite lors de la mise à jour du profil !");
+                return StatusCode(500, "Une erreur s'est produite lors de la suppression du profil !");
             }
 
             return NoContent();

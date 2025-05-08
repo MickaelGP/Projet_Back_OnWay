@@ -9,11 +9,24 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
     [ApiController]
     public class CovoiturageController : ControllerBase
     {
-        private readonly  ICovoiturageMetier _metier;
+        private readonly ICovoiturageMetier _metier;
 
         public CovoiturageController(ICovoiturageMetier metier)
         {
             _metier = metier;
+        }
+
+        [HttpDelete("/delete")]
+        public IActionResult DeleteCovoitById([FromBody] int unId)
+        {
+            bool resultat = _metier.DeleteCovoitById(unId);
+
+            if (!resultat)
+            {
+                return StatusCode(500, "Une erreur s'est produite lors de la suppression du covoiturage !");
+            }
+
+            return NoContent();
         }
 
         [HttpGet("/les-covoiturages")]
@@ -21,7 +34,7 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         {
             List<GetListeCovoitByUtilIdDto> listeCovoits = _metier.GetAllCovoitByUtilId(unId);
 
-            if(listeCovoits.Count == 0)
+            if (listeCovoits.Count == 0)
             {
                 return NotFound();
             }

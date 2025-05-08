@@ -6,7 +6,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
     public class CovoiturageRepo : ICovoiturageRepo
     {
-        private readonly SqlConnection  _connexion;
+        private readonly SqlConnection _connexion;
 
         public CovoiturageRepo()
         {
@@ -63,6 +63,89 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             this._connexion.Close();
 
             return listeCovoiturages;
+        }
+
+        public int DeleteCovoitById(int unId)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                _connexion.Open();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "DELETE FROM covoiturages WHERE CovoitId = @CovoitId";
+
+            SqlParameter CovoitId = cmd.Parameters.Add("@CovoitId", SqlDbType.Int);
+
+            CovoitId.Value = unId;
+
+            int resultat = cmd.ExecuteNonQuery();
+
+            this._connexion.Close();
+
+            return resultat;
+        }
+
+        public List<Utilisateurs> GetUtilCredit(int unCovoitId)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                _connexion.Open();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "SELECT UtilCredit, UtilId FROM reservations " +
+                "INNER JOIN utilisateurs ON ResaUtil = UtilId " +
+                "WHERE ResaCovoit = @CovoitId";
+
+            SqlParameter CovoitId = cmd.Parameters.Add("@CovoitId", SqlDbType.Int);
+
+            CovoitId.Value = unCovoitId;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            List<Utilisateurs> listeUtilisateurs = new List<Utilisateurs>();
+
+            while (reader.Read())
+            {
+                Utilisateurs unUtilisateur = new Utilisateurs
+                {
+                    UtilCredit = Convert.ToInt16(reader["UtilCredit"]),
+                    UtilId = (int)reader["UtilId"]
+                };
+                listeUtilisateurs.Add(unUtilisateur);
+            }
+            reader.Close();
+
+            this._connexion.Close();
+
+            return listeUtilisateurs;
+        }
+
+        public int UpdateCreditUtil(int unId, short unSolde)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                _connexion.Open();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "UPDATE utilisateurs SET UtilCredit = @UtilCredit WHERE UtilId = @UtilId";
+
+            SqlParameter UtilCredit = cmd.Parameters.Add("@UtilCredit", SqlDbType.SmallInt);
+            SqlParameter UtilId = cmd.Parameters.Add("@UtilId", SqlDbType.Int);
+
+            UtilCredit.Value = unSolde;
+            UtilId.Value = unId;
+
+            int resultat = cmd.ExecuteNonQuery();
+
+            this._connexion.Close();
+
+            return resultat;
         }
     }
 }

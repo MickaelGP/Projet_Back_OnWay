@@ -5,7 +5,7 @@ using BackOnWay.Repository.Utilisateur.Conducteur;
 
 namespace BackOnWay.Metier.Utilisateur.Conducteur
 {
-    public class CovoiturageMetier : ICovoiturageMetier 
+    public class CovoiturageMetier : ICovoiturageMetier
     {
         private readonly ICovoiturageRepo _repo;
 
@@ -13,6 +13,32 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
         {
             _repo = repo;
         }
+
+        public bool DeleteCovoitById(int unId)
+        {
+            List<Utilisateurs> listeUtils = _repo.GetUtilCredit(unId);
+            if (listeUtils.Count > 0)
+            {
+                int solde;
+                foreach (Utilisateurs utilisateurs in listeUtils)
+                {
+                    solde = utilisateurs.UtilCredit + 1;
+                    _repo.UpdateCreditUtil(utilisateurs.UtilId, (short)solde);
+                }
+            }
+                int resultat = _repo.DeleteCovoitById(unId);
+                bool reponse;
+                if (resultat == 0)
+                {
+                    reponse = false;
+                }
+                else
+                {
+                    reponse = true;
+                }
+
+                return reponse;
+            }
 
         public List<GetListeCovoitByUtilIdDto> GetAllCovoitByUtilId(int unId)
         {
