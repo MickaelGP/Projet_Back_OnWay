@@ -1,14 +1,17 @@
 using BackOnWay.Metier.Utilisateur.Conducteur;
+using BackOnWay.Metier.Utilisateur.Passager;
 using BackOnWay.Repository.Utilisateur.Conducteur;
+using BackOnWay.Repository.Utilisateur.Passager;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Ajout pour injection de dépendances
 builder.Services.AddScoped<ICovoiturageRepo, CovoiturageRepo>();
 builder.Services.AddScoped<ICovoiturageMetier, CovoiturageMetier>();
+builder.Services.AddScoped<IParticiperCovoitRepo, ParticiperCovoitRepo>();
+builder.Services.AddScoped<IParticiperCovoitMetier, ParticiperCovoitMetier>();
 
 // Add services to the container.
-
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
 {

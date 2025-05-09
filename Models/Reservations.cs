@@ -15,13 +15,13 @@ namespace BackOnWay.Models
         /// <summary>
         /// Nombre de siege réservé
         /// </summary>
-        [Required(ErrorMessage = "Le nombre de siége est requis.")]
+        //[Required(ErrorMessage = "Le nombre de siége est requis.")]
         public byte ResaNbSiege { get; set; }
 
         /// <summary>
         /// Date de la réservation
         /// </summary>
-        [Required(ErrorMessage = "La date est requise.")]
+        //[Required(ErrorMessage = "La date est requise.")]
         public DateOnly ResaDate { get; set; }
 
         /// <summary>

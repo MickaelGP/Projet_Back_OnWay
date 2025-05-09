@@ -27,7 +27,12 @@ namespace BackOnWay.Repository.Visiteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT CovoitPrix, CovoitId, CovoitDate, dep.AdresseVille AS VilleDepart, arr.AdresseVille AS VilleArriver, CovoitDep, CovoitArr, dep.AdresseCp AS Cp from covoiturages INNER JOIN adresses AS dep ON dep.AdresseId = DepartAdresse INNER JOIN adresses AS arr ON arr.AdresseId = ArriveAdresse WHERE dep.AdresseVille = @VilleDepart AND  arr.AdresseVille =  @VilleArriver AND CovoitDate = @Date";
+            cmd.CommandText = "SELECT CovoitPrix, CovoitId, CovoitDate, dep.AdresseVille AS VilleDepart, arr.AdresseVille AS VilleArriver, CovoitDep, CovoitArr, dep.AdresseCp AS Cp from covoiturages " +
+                "INNER JOIN adresses AS dep ON dep.AdresseId = DepartAdresse " +
+                "INNER JOIN adresses AS arr ON arr.AdresseId = ArriveAdresse " +
+                "WHERE dep.AdresseVille = @VilleDepart " +
+                "AND  arr.AdresseVille =  @VilleArriver " +
+                "AND CovoitDate = @Date";
 
             SqlParameter VilleDepart = cmd.Parameters.Add("@VilleDepart", SqlDbType.VarChar);
             SqlParameter VilleArriver = cmd.Parameters.Add("@VilleArriver", SqlDbType.VarChar);
