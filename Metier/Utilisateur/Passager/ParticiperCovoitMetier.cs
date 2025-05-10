@@ -51,8 +51,11 @@ namespace BackOnWay.Metier.Utilisateur.Passager
                             // Ajout reussi.
                             reponse = 3;
                         }
-                        //Erreur lors de l'ajout
-                        reponse = 4;
+                        else
+                        {
+                            //Erreur lors de l'ajout
+                            reponse = 4;
+                        }
                     }
                 }
             }

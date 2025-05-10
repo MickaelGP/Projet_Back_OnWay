@@ -33,7 +33,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             CovoitId.Value = unCovoitId;
 
-            int resultat = cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+            int resultat = -1;
+            while (reader.Read())
+            {
+                resultat = Convert.ToInt32(reader["SiegeRestant"]);
+            }
+
+            reader.Close();
 
             this._connexion.Close();
 
@@ -55,7 +62,15 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             UtilId.Value = unId;
 
-            int resultat = cmd.ExecuteNonQuery();
+            SqlDataReader reader = cmd.ExecuteReader();
+            int resultat = -1;
+
+            while (reader.Read())
+            {
+                resultat = Convert.ToInt32(reader["UtilCredit"]);
+            }
+
+            reader.Close();
 
             this._connexion.Close();
 
