@@ -23,13 +23,13 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT Covoitid, CovoitDate, CovoitDep, CovoitArr, dep.AdresseVille AS DepartVille, arr.AdresseVille AS ArriveVille FROM covoiturages " +
+            cmd.CommandText = "SELECT Covoitid, CovoitDate, CovoitDep, CovoitArr, dep.AdresseVille AS DepartVille, arr.AdresseVille AS ArriveVille, CovoitStatut FROM covoiturages " +
                 "INNER JOIN adresses AS dep ON DepartAdresse = dep.AdresseId " +
                 "INNER JOIN adresses AS arr ON ArriveAdresse = arr.AdresseId " +
                 "INNER JOIN voitures ON CovoitVoiture = VoitId " +
                 "INNER JOIN conducteurs ON VoitConduc = ConducId " +
                 "INNER JOIN utilisateurs ON ConducId = UtilId " +
-                "WHERE UtilId = @UtilId AND CovoitStatut = 'En attente'";
+                "WHERE UtilId = @UtilId";
 
             SqlParameter UtilId = cmd.Parameters.Add("@UtilId", SqlDbType.Int);
 
@@ -47,6 +47,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
                     CovoitDate = DateOnly.FromDateTime((DateTime)reader["CovoitDate"]),
                     CovoitDep = TimeOnly.FromTimeSpan((TimeSpan)reader["CovoitDep"]),
                     CovoitArr = TimeOnly.FromTimeSpan((TimeSpan)reader["CovoitArr"]),
+                    CovoitStatut = reader["CovoitStatut"].ToString(),
                     DepartAdresse = new Adresses
                     {
                         AdresseVille = reader["DepartVille"].ToString(),

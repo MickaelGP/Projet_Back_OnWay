@@ -55,6 +55,7 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
                     CovoitDep = unCovoit.CovoitDep,
                     ArriveVille = unCovoit.ArriveAdresse.AdresseVille,
                     DepartVille = unCovoit.DepartAdresse.AdresseVille,
+                    CovoitStatut = unCovoit.CovoitStatut,
                 };
                 listeCovoits.Add(unUtilCovoit);
             }

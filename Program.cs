@@ -10,7 +10,8 @@ builder.Services.AddScoped<ICovoiturageRepo, CovoiturageRepo>();
 builder.Services.AddScoped<ICovoiturageMetier, CovoiturageMetier>();
 builder.Services.AddScoped<IParticiperCovoitRepo, ParticiperCovoitRepo>();
 builder.Services.AddScoped<IParticiperCovoitMetier, ParticiperCovoitMetier>();
-
+builder.Services.AddScoped<IHistoriqueCovoitRepo, HistoriqueCovoitRepo>();
+builder.Services.AddScoped<IHistoriqueCovoitMetier, HistoriqueCovoitMetier>();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>
