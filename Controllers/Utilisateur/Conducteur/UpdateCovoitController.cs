@@ -17,7 +17,7 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         }
 
         [HttpPut]
-        public IActionResult UpdateCovoit(UpdateCovoitDto updateCovoit)
+        public IActionResult UpdateCovoit([FromBody] UpdateCovoitDto updateCovoit)
         {
             int reponse = _metier.UpdateCovoit(updateCovoit);
 
