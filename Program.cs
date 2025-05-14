@@ -1,10 +1,17 @@
+using BackOnWay.Metier.Admin;
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Passager;
+using BackOnWay.Repository.Admin;
 using BackOnWay.Repository.Utilisateur.Conducteur;
 using BackOnWay.Repository.Utilisateur.Passager;
+using BackOnWay.Utils;
 
 var builder = WebApplication.CreateBuilder(args);
 
+//Test Factory
+builder.Services.AddSingleton<IDbConnectionFactory, SqlDbConnectionFactory>();
+builder.Services.AddScoped<ListeCompteRepo>();
+builder.Services.AddScoped<ListeCompteMetier>();
 // Ajout pour injection de dépendances
 builder.Services.AddScoped<ICovoiturageRepo, CovoiturageRepo>();
 builder.Services.AddScoped<ICovoiturageMetier, CovoiturageMetier>();
