@@ -16,6 +16,8 @@ builder.Services.AddScoped<IDeposerAvisRepo, DeposerAvisRepo>();
 builder.Services.AddScoped<IDeposerAvisMetier, DeposerAvisMetier>();
 builder.Services.AddScoped<IDeposerReclamationRepo, DeposerReclamationRepo>();
 builder.Services.AddScoped<IDeposerReclamationMetier, DeposerReclamationMetier>();
+builder.Services.AddScoped<IUpdateCovoitRepo, UpdateCovoitRepo>();
+builder.Services.AddScoped<IUpdateCovoitMetier, UpdateCovoitMetier>();
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddCors(options =>

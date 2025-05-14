@@ -13,31 +13,26 @@ namespace BackOnWay.Models
         /// <summary>
         /// Prix du covoiturage 
         /// </summary>
-       // [Required(ErrorMessage = "Le prix du covoiturage est requis.")]
         public double CovoitPrix { get; set; }
 
         /// <summary>
         /// Date de départ du covoiturage
         /// </summary>
-        //[Required(ErrorMessage = "La date du covoiturage est requise.")]
         public DateOnly CovoitDate { get; set; }
 
         /// <summary>
         /// Heure de départ du covoiturage
         /// </summary>
-        //[Required(ErrorMessage = "L'heure de départ du covoiturage est requise.")]
         public TimeOnly CovoitDep { get; set; }
 
         /// <summary>
         /// Heure d'arrivé du covoiturage
         /// </summary>
-        //[Required(ErrorMessage = "L'heure d'arrivée du covoiturage est requise.")]
         public TimeOnly CovoitArr { get; set; }
 
         /// <summary>
         /// Etat du covoiturage ( En attente )
         /// </summary>
-       // [StringLength(15, ErrorMessage = "Le champ doit comporter 15 caractères au maximum.")]
         public string CovoitStatut { get; set; }
         /// <summary>
         /// Preference
@@ -47,6 +42,9 @@ namespace BackOnWay.Models
         /// Preference
         /// </summary>
         public bool CovoitFumeur { get; set; }
+        /// <summary>
+        /// Preference
+        /// </summary>
         public bool CovoitAnimaux { get; set; }
         /// <summary>
         /// Identifiant de la voiture
