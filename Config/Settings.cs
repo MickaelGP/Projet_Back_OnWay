@@ -1,5 +1,6 @@
 ﻿
 using BackOnWay.Models;
+using BackOnWay.Utils;
 
 namespace BackOnWay.Config
 {
@@ -30,6 +31,18 @@ namespace BackOnWay.Config
             SmtpSettings smtpSettings = config.GetSection("SmtpSettings").Get<SmtpSettings>();
 
             return smtpSettings;
+        }
+
+        public JwtSettings GetJwtSettings()
+        {
+            var config = new ConfigurationBuilder()
+           .SetBasePath(Directory.GetCurrentDirectory())
+           .AddJsonFile("appsettings.json")
+           .Build();
+
+            JwtSettings jwtSettings = config.GetSection("JwtSettings").Get<JwtSettings>();
+
+            return jwtSettings;
         }
     }
 }

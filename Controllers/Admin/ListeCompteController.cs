@@ -14,6 +14,7 @@ namespace BackOnWay.Controllers.Admin
         private ListeCompteMetier _metier = new ListeCompteMetier();
 
         [HttpGet]
+        //[Authorize(Roles = "Admin")]
         public IActionResult GetListeCompte()
         {
             List<UtilisateurDto> utilisateurs = _metier.GetListeCompte();
