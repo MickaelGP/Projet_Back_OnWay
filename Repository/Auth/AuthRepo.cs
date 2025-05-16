@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using BackOnWay.Models;
+using Microsoft.Data.SqlClient;
 using System.Data;
 
 namespace BackOnWay.Repository.Auth
@@ -18,7 +19,7 @@ namespace BackOnWay.Repository.Auth
             _connexion = maConnexion.GetConnection();
         }
 
-        public string Connexion(string unEmail)
+        public Utilisateurs Connexion(string unEmail)
         {
             if (_connexion == null || _connexion.State == ConnectionState.Closed)
             {
@@ -27,21 +28,61 @@ namespace BackOnWay.Repository.Auth
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT UtilMdp FROM utilisateurs WHERE UtilEmail = @UtilEmail";
+            cmd.CommandText = "SELECT UtilId, UtilEmail, UtilMdp, RoleLabel FROM utilisateurs " +
+                "INNER JOIN roles ON UtilRole = RoleId WHERE UtilEmail = @UtilEmail";
 
             SqlParameter UtilEmail = cmd.Parameters.Add("@UtilEmail", SqlDbType.VarChar);
 
             UtilEmail.Value = unEmail;
 
             SqlDataReader reader = cmd.ExecuteReader();
-            string resultat = "";
-            if (reader.Read())
+            Utilisateurs? infoUtilisateur = null;
+            while (reader.Read())
             {
-                resultat = reader.GetString(0);
+                infoUtilisateur = new Utilisateurs
+                {
+                    UtilId = (int)reader["UtilId"],
+                    UtilEmail = reader["UtilEmail"].ToString(),
+                    UtilMdp = reader["UtilMdp"].ToString(),
+                    Roles = new Roles()
+                    {
+                        RoleLabel = reader["RoleLabel"].ToString()
+                    }
+                };
+            }
+            reader.Close();
+            
+            this._connexion.Close();
+
+            return infoUtilisateur;
+        }
+
+        public int CreateSession(Sessions unSession)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                DbConnecter();
             }
 
-            return resultat;
+            SqlCommand cmd = _connexion.CreateCommand();
 
+            cmd.CommandText = "INSERT INTO Sessions (SessionCreer, SessionFin, SessionToken, SessionUtil) VALUES (@SessionCreer, @SessionFin, @SessionToken, @SessionUtil)";
+
+            SqlParameter SessionCreer = cmd.Parameters.Add("@SessionCreer", SqlDbType.DateTime);
+            SqlParameter SessionFin = cmd.Parameters.Add("@SessionFin", SqlDbType.DateTime);
+            SqlParameter SessionToken = cmd.Parameters.Add("@SessionToken", SqlDbType.NVarChar);
+            SqlParameter SessionUtil = cmd.Parameters.Add("@SessionUtil", SqlDbType.Int);
+
+            SessionCreer.Value = unSession.SessionCreer;
+            SessionFin.Value = unSession.SessionFin;
+            SessionToken.Value = unSession.SessionToken;
+            SessionUtil.Value = unSession.SessionUtil;
+
+            int resultat = cmd.ExecuteNonQuery();
+
+            this._connexion.Close();
+
+            return resultat;
         }
     }
 }

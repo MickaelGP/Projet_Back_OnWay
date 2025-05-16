@@ -14,17 +14,32 @@ namespace BackOnWay.Controllers.Auth
         [HttpPost("/connexion")]
         public IActionResult Authentifier([FromBody] ConnexionDto uneConnexion)
         {
-            int resultat = _metier.Authentifier(uneConnexion);
-
-            switch (resultat)
+            ConnexionInfoDto? session = _metier.Authentifier(uneConnexion);
+            if (session == null)
             {
-                case 0:
-                    return BadRequest("Les information de connexion ne sont pas correcte");
-                case 1:
-                    return NoContent();
-                default:
-                    return StatusCode(520, "Une erreur inconnue est survenue.");
+                return NotFound();
             }
+            else
+            {
+                Response.Cookies.Append("session_token", session.Token, new CookieOptions
+                {
+                    HttpOnly = true,
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                });
+
+                return Ok(session);
+            }
+            //switch (resultat)
+            //{
+            //    case 0:
+            //        return BadRequest("Les information de connexion ne sont pas correcte");
+            //    case 1:
+            //        return NoContent();
+            //    default:
+            //        return StatusCode(520, "Une erreur inconnue est survenue.");
+            //}
         }
     }
 }
