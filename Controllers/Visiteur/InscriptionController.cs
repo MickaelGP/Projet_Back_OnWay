@@ -12,7 +12,7 @@ namespace BackOnWay.Controllers.Visiteur
     {
         private InscriptionMetier _metier = new InscriptionMetier();
 
-        [HttpPost]
+        [HttpPost("/inscription")]
         public IActionResult CreateCompte([FromBody] CreateCompteDto unCompte)
         {
             string passwordHash = BCrypt.Net.BCrypt.HashPassword(unCompte.UtilMdp, 12);

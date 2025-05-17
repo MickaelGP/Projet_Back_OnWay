@@ -1,4 +1,5 @@
 ﻿using BackOnWay.Dtos.Admin;
+using BackOnWay.Dtos.Auth;
 using BackOnWay.Metier.Admin;
 using BackOnWay.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +17,11 @@ namespace BackOnWay.Controllers.Admin
         [HttpGet]
         public IActionResult GetListeCompte()
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return Unauthorized("Accés refusé");
+            }
             List<UtilisateurDto> utilisateurs = _metier.GetListeCompte();
             return Ok(utilisateurs);
         }

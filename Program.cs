@@ -1,5 +1,6 @@
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Passager;
+using BackOnWay.Middlewares;
 using BackOnWay.Repository.Utilisateur.Conducteur;
 using BackOnWay.Repository.Utilisateur.Passager;
 
@@ -47,6 +48,7 @@ app.UseCors();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+app.UseMiddleware<SessionMiddleware>();
 
 app.MapControllers();
 

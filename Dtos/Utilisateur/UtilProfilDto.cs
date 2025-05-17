@@ -4,7 +4,6 @@ namespace BackOnWay.Dtos.Utilisateur
 {
     public class UtilProfilDto
     {
-        [Required]
         public int UtilId { get; set; }
 
         [Required(ErrorMessage = "Le pseudo est requis")]

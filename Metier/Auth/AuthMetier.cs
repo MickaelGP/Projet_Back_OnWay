@@ -53,5 +53,22 @@ namespace BackOnWay.Metier.Auth
             }
             return reponse;
         }
+
+        public int Deconnexion(string unToken)
+        {
+            int reponse;
+            int resultat = _repo.Deconnexion(unToken);
+
+            if (resultat == 0)
+            {
+                //Un probléme
+                reponse = 0;
+            }
+            else
+            {
+                reponse = 1;
+            }
+            return reponse;
+        }
     }
 }

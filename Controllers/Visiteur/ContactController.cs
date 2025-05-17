@@ -11,7 +11,7 @@ namespace BackOnWay.Controllers.Visiteur
     {
         private SendMailUtils _utilsMail = new SendMailUtils();
 
-        [HttpPost]
+        [HttpPost("/contact")]
         public IActionResult SendEmail([FromBody] ContactDto infoContact)
         {
             try

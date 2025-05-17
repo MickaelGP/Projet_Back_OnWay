@@ -4,7 +4,6 @@ namespace BackOnWay.Dtos.Utilisateur
 {
     public class UpdateMdpUtilDto
     {
-        [Required]
         public int UtilId { get; set; }
 
         [Required(ErrorMessage = "Le mot de passe est requis.")]

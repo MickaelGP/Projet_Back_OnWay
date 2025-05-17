@@ -1,5 +1,7 @@
-﻿using BackOnWay.Dtos.Utilisateur;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur;
 using BackOnWay.Metier.Utilisateur;
+using BackOnWay.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,10 +13,16 @@ namespace BackOnWay.Controllers.Utilisateur
     {
         private ProfilMetier _metier = new ProfilMetier();
 
-        [HttpGet("{unId}")]
-        public IActionResult GetProfilUtil(int unId)
+        [HttpGet("/info-profil")]
+        public IActionResult GetProfilUtil()
         {
-            UtilProfilDto? unProfil = _metier.GetProfilUtil(unId);
+           ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return Unauthorized("Utilisateur non connecté.");
+            }
+
+            UtilProfilDto? unProfil = _metier.GetProfilUtil(util.UtilId);
 
             if (unProfil == null)
             {
@@ -27,7 +35,12 @@ namespace BackOnWay.Controllers.Utilisateur
         [HttpPut("update-profil")]
         public IActionResult UpdateProfil([FromBody] UtilProfilDto utilProfil)
         {
-
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return Unauthorized("Utilisateur non connecté.");
+            }
+            utilProfil.UtilId = util.UtilId;
             int infoProfil = _metier.UpdateProfil(utilProfil);
 
             switch (infoProfil)
@@ -46,6 +59,12 @@ namespace BackOnWay.Controllers.Utilisateur
         [HttpPut("update-mot-de-passe")]
         public IActionResult UpdateMdpUtil(UpdateMdpUtilDto utilMdpUtil)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return Unauthorized("Utilisateur non connecté.");
+            }
+            utilMdpUtil.UtilId = util.UtilId;
             int resultat = _metier.UpdateMdpUtil(utilMdpUtil);
 
             switch (resultat)
@@ -62,9 +81,14 @@ namespace BackOnWay.Controllers.Utilisateur
         }
 
         [HttpDelete("/delete-profil")]
-        public IActionResult DeleteProfilUtil([FromBody] int unId)
+        public IActionResult DeleteProfilUtil()
         {
-            bool resultat = _metier.DeleteProfilUtil(unId);
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return Unauthorized("Utilisateur non connecté.");
+            }
+            bool resultat = _metier.DeleteProfilUtil(util.UtilId);
 
             if (!resultat)
             {

@@ -1,4 +1,5 @@
-﻿using BackOnWay.Models;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Models;
 using Microsoft.Data.SqlClient;
 using System.Data;
 
@@ -51,7 +52,7 @@ namespace BackOnWay.Repository.Auth
                 };
             }
             reader.Close();
-            
+
             this._connexion.Close();
 
             return infoUtilisateur;
@@ -83,6 +84,64 @@ namespace BackOnWay.Repository.Auth
             this._connexion.Close();
 
             return resultat;
+        }
+        public int Deconnexion(string unToken)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                DbConnecter();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "UPDATE Sessions SET SessionActive = 0 WHERE SessionToken = @Token";
+
+            SqlParameter Token = cmd.Parameters.Add("@Token", SqlDbType.NVarChar);
+
+            Token.Value = unToken;
+
+            int resultat = cmd.ExecuteNonQuery();
+
+            this._connexion.Close();
+
+            return resultat;
+        }
+
+        public ConnexionInfoDto? GetUtilByToken(string token)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                DbConnecter();
+            }
+
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "SELECT UtilId, RoleLabel FROM utilisateurs " +
+                "INNER JOIN roles ON RoleId = UtilRole " +
+                "INNER JOIN sessions ON UtilId = SessionUtil " +
+                "WHERE SessionToken = @Token AND SessionActive = 1 AND SessionFin > GETDATE()";
+
+            SqlParameter Token = cmd.Parameters.Add("@Token", SqlDbType.NVarChar);
+
+            Token.Value = token;
+
+            ConnexionInfoDto? infoUtil = null;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read())
+            {
+                infoUtil = new ConnexionInfoDto
+                {
+                    UtilId = (int)reader["UtilId"],
+                    RoleLabel = reader["RoleLabel"].ToString()
+                };
+            }
+            reader.Close();
+
+            this._connexion.Close();
+
+            return infoUtil;
         }
     }
 }

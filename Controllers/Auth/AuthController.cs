@@ -29,17 +29,26 @@ namespace BackOnWay.Controllers.Auth
                     Expires = DateTimeOffset.UtcNow.AddHours(1)
                 });
 
-                return Ok(session);
+                return NoContent();
             }
-            //switch (resultat)
-            //{
-            //    case 0:
-            //        return BadRequest("Les information de connexion ne sont pas correcte");
-            //    case 1:
-            //        return NoContent();
-            //    default:
-            //        return StatusCode(520, "Une erreur inconnue est survenue.");
-            //}
+        }
+
+        [HttpPost("/deconnexion")]
+        public IActionResult Deconnexion()
+        {
+            string token = Request.Cookies["session_token"];
+            if (string.IsNullOrEmpty(token))
+            {
+                return BadRequest("Aucun token fourni.");
+            }
+            int resultat = _metier.Deconnexion(token);
+            if (resultat == 0)
+            {
+                return StatusCode(500, "Une erreur s'est produite lors de la déconnexion !");
+            }
+            Response.Cookies.Delete("session_token");
+            return Ok("Déconnexion réussie");
+
         }
     }
 }
