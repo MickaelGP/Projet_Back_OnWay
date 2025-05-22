@@ -26,7 +26,7 @@ namespace BackOnWay.Metier.Visiteur
                     UtilPseudo = unCompte.UtilPseudo,
                     UtilPrenom = "default",
                     UtilNom = "default",
-                    UtilNaissance = DateOnly.ParseExact("01/01/0001", "dd/MM/yyyy", CultureInfo.InvariantCulture),
+                    UtilNaissance = unCompte.UtilNaissance,
                     ImgChemin = "default",
                     UtilCredit = 20,
                     UtilEmail = unCompte.UtilEmail,

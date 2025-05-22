@@ -18,11 +18,16 @@ namespace BackOnWay.Controllers.Visiteur
             {
                 _utilsMail.SendEmailContact(infoContact);
 
-                return NoContent();
+                return Ok(new { message = "Votre email à bien été envoyé" });
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Une erreur est survenue lors de lenvoie du mail !");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Erreur envoie de mail",
+                    Detail = "Une erreur est survenue lors de l'envoie de l'eamil",
+                    Status = StatusCodes.Status500InternalServerError
+                });
             }
         }
     }

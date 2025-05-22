@@ -23,14 +23,29 @@ namespace BackOnWay.Controllers.Visiteur
             switch (resultat)
             {
                 case 0:
-                    return Conflict("L'email existe déjà.");
+                    return Conflict(new ProblemDetails
+                    {
+                        Title = "Email existant",
+                        Detail = "L'inscritption n'est pas possible car l'adresse email existe déjà'",
+                        Status = StatusCodes.Status409Conflict
+                    });
                 case 1:
-                    return StatusCode(500, "Une erreur s'est produite lors de la création du compte !");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur interne",
+                        Detail = "Une erreur est survenue lors de la création du compte",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
                 case 2:
                     new SendMailUtils().SendEmailnewCompteUtil(unCompte);
-                    return NoContent();
+                    return Ok(new { message = "Inscription réussie" });
                 default:
-                    return StatusCode(520, "Une erreur inconnue est survenue.");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur inconnue",
+                        Detail = "Une erreur inattendue est survenue.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
             }
 
         }

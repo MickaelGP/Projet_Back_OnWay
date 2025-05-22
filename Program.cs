@@ -6,7 +6,7 @@ using BackOnWay.Repository.Utilisateur.Passager;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Ajout pour injection de dépendances
+// Injection de dépendances
 builder.Services.AddScoped<ICovoiturageRepo, CovoiturageRepo>();
 builder.Services.AddScoped<ICovoiturageMetier, CovoiturageMetier>();
 builder.Services.AddScoped<IParticiperCovoitRepo, ParticiperCovoitRepo>();
@@ -19,33 +19,39 @@ builder.Services.AddScoped<IDeposerReclamationRepo, DeposerReclamationRepo>();
 builder.Services.AddScoped<IDeposerReclamationMetier, DeposerReclamationMetier>();
 builder.Services.AddScoped<IUpdateCovoitRepo, UpdateCovoitRepo>();
 builder.Services.AddScoped<IUpdateCovoitMetier, UpdateCovoitMetier>();
-// Add services to the container.
+
+// Contrôleurs
 builder.Services.AddControllers();
+
+// CORS pour autoriser Next.js (http://localhost:3000) avec cookies
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(
-        policy =>
-        {
-            policy.AllowAnyOrigin()
-                  .AllowAnyMethod()
-                  .AllowAnyHeader();
-        });
+    options.AddPolicy("AllowNextJsLocalhost", policy =>
+    {
+        policy.WithOrigins("http://localhost:3000")
+              .AllowCredentials()
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
 });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
+// Swagger (si besoin)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// DevTools (Swagger)
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors();
 app.UseHttpsRedirection();
+
+// CORS doit être avant Authorization/Middleware
+app.UseCors("AllowNextJsLocalhost");
 
 app.UseAuthorization();
 app.UseMiddleware<SessionMiddleware>();

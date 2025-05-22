@@ -11,13 +11,18 @@ namespace BackOnWay.Controllers.Visiteur
     {
         private RechercheCovoitMetier _metier = new RechercheCovoitMetier();
 
-        [HttpPost]
+        [HttpPost("/recherche-covoiturage")]
         public IActionResult GetExactCovoiturages([FromBody] RechercheCovoitDto recherche)
         {
             RechercheCovoitDto unCovoit = _metier.GetExactCovoiturages(recherche);
             if (unCovoit == null)
             {
-                return NotFound("Aucun résultat trouvé !");
+                return StatusCode(404, new ProblemDetails
+                {
+                    Title = "Aucun covoiturages",
+                    Detail = "Aucun covoiturage n'a été trouvé",
+                    Status = StatusCodes.Status404NotFound
+                });
             }
             return Ok(unCovoit);
         }

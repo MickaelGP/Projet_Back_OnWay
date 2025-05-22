@@ -24,12 +24,12 @@ namespace BackOnWay.Controllers.Auth
                 Response.Cookies.Append("session_token", session.Token, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = true,
-                    SameSite = SameSiteMode.Strict,
+                    Secure = false,
+                    SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddHours(1)
                 });
 
-                return NoContent();
+                return Ok(new { message = "Authentification réussie" });
             }
         }
 

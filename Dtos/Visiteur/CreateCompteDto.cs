@@ -16,6 +16,8 @@ namespace BackOnWay.Dtos.Visiteur
         [RegularExpression(@"^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-z^A-Z^0-9]).{8,}$", ErrorMessage = "Format invalide")]
         public string UtilMdp { get; set; }
 
+        public DateOnly UtilNaissance { get; set; }
+
         [Required(ErrorMessage = "Le genre est requis.")]
         public string UtilGenre { get; set; }
     }
