@@ -8,7 +8,7 @@ namespace BackOnWay.Metier.Visiteur
     {
         private RechercheCovoitRepo _repo = new RechercheCovoitRepo();
 
-        public RechercheCovoitDto GetExactCovoiturages(RechercheCovoitDto recherche)
+        public List<RechercheCovoitDto> GetExactCovoiturages(RechercheCovoitDto recherche)
         {
             Covoiturages covoiturages = new Covoiturages
             {
@@ -22,43 +22,52 @@ namespace BackOnWay.Metier.Visiteur
                     AdresseVille = recherche.VilleArriver
                 }
             };
-            Covoiturages resultatRecherche = _repo.GetExactCovoiturages(covoiturages);
-            RechercheCovoitDto unCovoit = null;
-            if (resultatRecherche != null)
+            List<Covoiturages> resultatRecherche = _repo.GetExactCovoiturages(covoiturages);
+            List<RechercheCovoitDto> Covoits = new List<RechercheCovoitDto>();
+            if (resultatRecherche.Count > 0)
             {
-                unCovoit = new RechercheCovoitDto
+                foreach (var covoit in resultatRecherche)
                 {
-                    CovoitId = resultatRecherche.CovoitId,
-                    CovoitPrix = resultatRecherche.CovoitPrix,
-                    CovoitDate = resultatRecherche.CovoitDate,
-                    VilleDepart = resultatRecherche.DepartAdresse.AdresseVille,
-                    VilleArriver = resultatRecherche.ArriveAdresse.AdresseVille,
-                    CovoitArriver = resultatRecherche.CovoitArr,
-                    CovoitDepart = resultatRecherche.CovoitDep
-                };
+                    RechercheCovoitDto unCovoit = new RechercheCovoitDto
+                    {
+                        CovoitId = covoit.CovoitId,
+                        CovoitPrix = covoit.CovoitPrix,
+                        CovoitDate = covoit.CovoitDate,
+                        VilleDepart = covoit.DepartAdresse.AdresseVille,
+                        VilleArriver = covoit.ArriveAdresse.AdresseVille,
+                        CovoitArriver = covoit.CovoitArr,
+                        CovoitDepart = covoit.CovoitDep
+                    };
+                    Covoits.Add(unCovoit);
+                }
             }
             else
             {
                 string codePostal = _repo.GetCodePostal(covoiturages.DepartAdresse.AdresseVille);
                 if (codePostal != null)
                 {
-                    Covoiturages resultatAlternatif = _repo.GetAlternatifCovoit(covoiturages, "06");
-                    if (resultatAlternatif != null)
+                    List<Covoiturages> resultatAlternatif = _repo.GetAlternatifCovoit(covoiturages, codePostal);
+
+                    if (resultatAlternatif.Count > 0)
                     {
-                        unCovoit = new RechercheCovoitDto
+                        foreach (var covoitAlternatif in resultatAlternatif)
                         {
-                            CovoitId = resultatAlternatif.CovoitId,
-                            CovoitPrix = resultatAlternatif.CovoitPrix,
-                            CovoitDate = resultatAlternatif.CovoitDate,
-                            VilleDepart = resultatAlternatif.DepartAdresse.AdresseVille,
-                            VilleArriver = resultatAlternatif.ArriveAdresse.AdresseVille,
-                            CovoitArriver = resultatAlternatif.CovoitArr,
-                            CovoitDepart = resultatAlternatif.CovoitDep
-                        };
+                            RechercheCovoitDto unCovoit = new RechercheCovoitDto
+                            {
+                                CovoitId = covoitAlternatif.CovoitId,
+                                CovoitPrix = covoitAlternatif.CovoitPrix,
+                                CovoitDate = covoitAlternatif.CovoitDate,
+                                VilleDepart = covoitAlternatif.DepartAdresse.AdresseVille,
+                                VilleArriver = covoitAlternatif.ArriveAdresse.AdresseVille,
+                                CovoitArriver = covoitAlternatif.CovoitArr,
+                                CovoitDepart = covoitAlternatif.CovoitDep
+                            };
+                            Covoits.Add(unCovoit);
+                        }
                     }
                 }
             }
-            return unCovoit;
+            return Covoits;
         }
     }
 }

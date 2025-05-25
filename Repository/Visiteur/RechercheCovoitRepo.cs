@@ -18,7 +18,7 @@ namespace BackOnWay.Repository.Visiteur
             Connexion maConnexion = new Connexion();
             _connexion = maConnexion.GetConnection();
         }
-        public Covoiturages GetExactCovoiturages(Covoiturages covoiturages)
+        public List<Covoiturages> GetExactCovoiturages(Covoiturages covoiturages)
         {
             if (_connexion == null || _connexion.State == ConnectionState.Closed)
             {
@@ -43,10 +43,10 @@ namespace BackOnWay.Repository.Visiteur
             Date.Value = covoiturages.CovoitDate;
 
             SqlDataReader reader = cmd.ExecuteReader();
-            Covoiturages unCovoiturage = null;
-            if (reader.Read())
+            List<Covoiturages> Covoiturages = new List<Covoiturages>();
+            while (reader.Read())
             {
-                unCovoiturage = new Covoiturages
+               Covoiturages unCovoiturage = new Covoiturages
                 {
                     CovoitId = (int)reader["CovoitId"],
                     CovoitPrix = Convert.ToDouble(reader["CovoitPrix"]),
@@ -64,12 +64,13 @@ namespace BackOnWay.Repository.Visiteur
                     }
 
                 };
+                Covoiturages.Add(unCovoiturage);
             }
             reader.Close();
 
             this._connexion.Close();
 
-            return unCovoiturage;
+            return Covoiturages;
         }
         public string GetCodePostal(string unVille)
         {
@@ -98,7 +99,7 @@ namespace BackOnWay.Repository.Visiteur
 
             return resultat;
         }
-        public Covoiturages GetAlternatifCovoit(Covoiturages covoiturage, string unCp)
+        public List<Covoiturages> GetAlternatifCovoit(Covoiturages covoiturage, string unCp)
         {
             if (_connexion == null || _connexion.State == ConnectionState.Closed)
             {
@@ -118,11 +119,11 @@ namespace BackOnWay.Repository.Visiteur
             Date.Value = covoiturage.CovoitDate;
 
             SqlDataReader reader = cmd.ExecuteReader();
-            Covoiturages unCovoiturage = null;
+            List<Covoiturages> covoiturages = new List<Covoiturages>();
 
-            if (reader.Read())
+            while (reader.Read())
             {
-                unCovoiturage = new Covoiturages
+                Covoiturages unCovoiturage = new Covoiturages
                 {
                     CovoitId = (int)reader["CovoitId"],
                     CovoitPrix = Convert.ToDouble(reader["CovoitPrix"]),
@@ -139,12 +140,13 @@ namespace BackOnWay.Repository.Visiteur
                     }
 
                 };
+                covoiturages.Add(unCovoiturage);
             }
             reader.Close();
 
             this._connexion.Close();
 
-            return unCovoiturage;
+            return covoiturages;
         }
     }
 }

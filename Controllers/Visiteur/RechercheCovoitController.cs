@@ -14,8 +14,8 @@ namespace BackOnWay.Controllers.Visiteur
         [HttpPost("/recherche-covoiturage")]
         public IActionResult GetExactCovoiturages([FromBody] RechercheCovoitDto recherche)
         {
-            RechercheCovoitDto unCovoit = _metier.GetExactCovoiturages(recherche);
-            if (unCovoit == null)
+            List<RechercheCovoitDto> unCovoit = _metier.GetExactCovoiturages(recherche);
+            if (unCovoit.Count < 1)
             {
                 return StatusCode(404, new ProblemDetails
                 {
