@@ -25,7 +25,7 @@ namespace BackOnWay.Middlewares
 
             // Si la requête est pour /connexion ou /inscription, on ne vérifie pas le token
             // car ce sont des routes publiques
-            if (path == "/connexion" || path == "/inscription" || path == "/contact" || path == "/recherche-covoiturage")
+            if (path == "/connexion" || path == "/inscription" || path == "/contact" || path == "/recherche-covoiturage" || path.StartsWith( "/details/") || path.StartsWith("/avis/"))
             {
                 await _next(context);
                 return;

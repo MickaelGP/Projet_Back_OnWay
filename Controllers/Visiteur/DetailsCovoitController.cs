@@ -11,7 +11,7 @@ namespace BackOnWay.Controllers.Visiteur
     {
         private DetailsCovoitMetier _metier = new DetailsCovoitMetier();
 
-        [HttpGet("{unId}")]
+        [HttpGet("/details/{unId}")]
         public IActionResult GetInfoCovoit(int unId)
         {
             DetailsCovoitDto infoCovoit = _metier.GetInfoCovoit(unId);

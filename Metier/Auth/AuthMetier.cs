@@ -12,12 +12,18 @@ namespace BackOnWay.Metier.Auth
         {
             string unEmail = uneConnexion.UtilEmail;
             string unMdp = uneConnexion.UtilMdp;
+
             Utilisateurs infoUtil = _repo.Connexion(uneConnexion.UtilEmail);
+            if (infoUtil == null)
+            {
+                return new ConnexionInfoDto { MessageErreur = "Utilisateur introuvable" };
+            }
+
             string hashMdp = infoUtil.UtilMdp;
             ConnexionInfoDto? reponse = null;
             if ( hashMdp == string.Empty)
             {
-                reponse = null;
+                return new ConnexionInfoDto { MessageErreur = "Mot de passe incorrect" };
             }
             else
             {
@@ -38,7 +44,7 @@ namespace BackOnWay.Metier.Auth
                     int createSession = _repo.CreateSession(unSession);
                     if (createSession == 0)
                     {
-                        reponse = new ConnexionInfoDto();
+                        return new ConnexionInfoDto { MessageErreur = "Erreur de session" };
                     }
                     else
                     {
@@ -49,6 +55,10 @@ namespace BackOnWay.Metier.Auth
                             Token = token,
                         };
                     }
+                }
+                else
+                {
+                    return new ConnexionInfoDto { MessageErreur = "Mot de passe incorrect" };
                 }
             }
             return reponse;

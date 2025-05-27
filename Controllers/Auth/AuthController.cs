@@ -15,9 +15,41 @@ namespace BackOnWay.Controllers.Auth
         public IActionResult Authentifier([FromBody] ConnexionDto uneConnexion)
         {
             ConnexionInfoDto? session = _metier.Authentifier(uneConnexion);
-            if (session == null)
+            if (session == null || !string.IsNullOrEmpty(session.MessageErreur))
             {
-                return NotFound();
+                switch (session?.MessageErreur)
+                {
+                    case "Utilisateur introuvable":
+                        return NotFound(new ProblemDetails
+                        {
+                            Title = "Utilisateur introuvable",
+                            Detail = "Aucun compte n'existe.",
+                            Status = StatusCodes.Status404NotFound
+                        });
+
+                    case "Mot de passe incorrect":
+                        return Unauthorized(new ProblemDetails
+                        {
+                            Title = "Mot de passe incorrect",
+                            Detail = "Email ou mot de passe incorect",
+                            Status = StatusCodes.Status401Unauthorized
+                        });
+
+                    case "Erreur de session":
+                        return StatusCode(500, new ProblemDetails
+                        {
+                            Title = "Erreur de session",
+                            Detail = "La session n’a pas pu être créée.",
+                            Status = StatusCodes.Status500InternalServerError
+                        });
+                    default:
+                        return StatusCode(500, new ProblemDetails
+                        {
+                            Title = "Erreur inconnue",
+                            Detail = "une erreur inconnue est survenue.",
+                            Status = StatusCodes.Status500InternalServerError
+                        });
+                }
             }
             else
             {
@@ -29,7 +61,11 @@ namespace BackOnWay.Controllers.Auth
                     Expires = DateTimeOffset.UtcNow.AddHours(1)
                 });
 
-                return Ok(new { message = "Authentification réussie" });
+                return Ok(new
+                {
+                    message = "Authentification réussie",
+                    utilisateur = new {session.RoleLabel }
+                });
             }
         }
 

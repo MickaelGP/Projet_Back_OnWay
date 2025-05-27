@@ -7,5 +7,7 @@
         public string Token { get; set; }
 
         public string RoleLabel { get; set; }
+
+        public string? MessageErreur { get; set; }
     }
 }
