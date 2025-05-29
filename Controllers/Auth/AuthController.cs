@@ -58,7 +58,8 @@ namespace BackOnWay.Controllers.Auth
                     HttpOnly = true,
                     Secure = false,
                     SameSite = SameSiteMode.Lax,
-                    Expires = DateTimeOffset.UtcNow.AddHours(1)
+                    Expires = DateTimeOffset.UtcNow.AddHours(1),
+                    Path= "/"
                 });
 
                 return Ok(new
@@ -80,9 +81,22 @@ namespace BackOnWay.Controllers.Auth
             int resultat = _metier.Deconnexion(token);
             if (resultat == 0)
             {
-                return StatusCode(500, "Une erreur s'est produite lors de la déconnexion !");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Erreur inconnue",
+                    Detail = "une erreur inconnue est survenue.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
             }
-            Response.Cookies.Delete("session_token");
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = false,
+                SameSite = SameSiteMode.Lax,
+                Path = "/"
+            };
+
+            Response.Cookies.Delete("session_token", cookieOptions);
             return Ok("Déconnexion réussie");
 
         }

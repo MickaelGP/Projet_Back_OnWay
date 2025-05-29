@@ -53,8 +53,8 @@ app.UseHttpsRedirection();
 // CORS doit être avant Authorization/Middleware
 app.UseCors("AllowNextJsLocalhost");
 
-app.UseAuthorization();
 app.UseMiddleware<SessionMiddleware>();
+app.UseAuthorization();
 
 app.MapControllers();
 
