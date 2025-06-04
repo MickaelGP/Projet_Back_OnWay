@@ -155,7 +155,7 @@ namespace BackOnWay.Controllers.Utilisateur
                 });
             }
 
-            return NoContent();
+            return Ok(new { message = "Compte supprimé avec succès" });
         }
     }
 }

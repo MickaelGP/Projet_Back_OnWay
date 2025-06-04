@@ -1,4 +1,5 @@
-﻿using BackOnWay.Dtos.Utilisateur.Conducteur;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +13,20 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         private AjoutCovoiturageMetier _metier = new AjoutCovoiturageMetier();
 
 
-        [HttpGet("/liste-voitures/{unId}")]
-        public IActionResult GetUtilVoitures(int unId)
+        [HttpGet("/liste-voitures")]
+        public IActionResult GetUtilVoitures()
         {
-            List<GetListeVoitureDto> listeVoitures = _metier.GetUtilVoitures(unId);
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+                List<GetListeVoitureDto> listeVoitures = _metier.GetUtilVoitures(util.UtilId);
 
             return Ok(listeVoitures);
         }

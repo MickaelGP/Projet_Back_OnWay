@@ -1,4 +1,5 @@
-﻿using BackOnWay.Dtos.Utilisateur.Conducteur;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using BackOnWay.Models;
 using Microsoft.AspNetCore.Http;
@@ -38,17 +39,33 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
             return Ok(listeModeles);
         }
 
-        [HttpPost]
+        [HttpPost("/ajout-voitures")]
         public IActionResult InsertVoiture([FromBody] InsertVoitureDto unVoiture)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+            unVoiture.UtilId = util.UtilId;
             bool resultat = _metier.InsertVoiture(unVoiture);
 
             if (!resultat)
             {
-                return StatusCode(500, "Une erreur s'est produite lors de l'ajout du véhicule !");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Erreur lors de l'ajout",
+                    Detail = "Une erreur s'est produite lors de l'ajout du véhicule !",
+                    Status = StatusCodes.Status500InternalServerError
+                });
             }
 
-            return NoContent();
+            return Ok(new { message = "Voiture ajoutée" });
         }
     }
 }
