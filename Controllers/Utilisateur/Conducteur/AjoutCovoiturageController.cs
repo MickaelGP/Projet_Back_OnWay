@@ -31,9 +31,20 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
             return Ok(listeVoitures);
         }
 
-        [HttpPost]
+        [HttpPost("/ajouter-covoiturage")]
         public IActionResult InsertCovoiturage([FromBody] InsertCovoiturageDto unCovoiturage)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+            unCovoiturage.UtilId = util.UtilId;
             int reponse = _metier.InsertCovoiturage(unCovoiturage);
 
             switch (reponse)

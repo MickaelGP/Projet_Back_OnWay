@@ -18,13 +18,13 @@
 
         public bool CovoitMusique { get; set; }
 
-        public byte DepartNum { get; set; }
+        public int DepartNum { get; set; }
 
         public string DepartRue { get; set; }
 
         public string DepartVille { get; set; }
 
-        public byte ArriverNum { get; set; }
+        public int ArriverNum { get; set; }
 
         public string ArriveRue { get; set; }
 

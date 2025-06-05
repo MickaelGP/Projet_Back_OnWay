@@ -14,7 +14,7 @@ namespace BackOnWay.Models
         /// Numéros de l'adresse
         /// </summary>
         //[Required(ErrorMessage = "Le numéros est requis.")]
-        public byte AdresseNum { get; set; }
+        public int AdresseNum { get; set; }
 
         /// <summary>
         /// Nom de la rue

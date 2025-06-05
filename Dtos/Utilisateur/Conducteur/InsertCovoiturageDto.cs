@@ -4,7 +4,7 @@ namespace BackOnWay.Dtos.Utilisateur.Conducteur
 {
     public class InsertCovoiturageDto
     {
-        [Required(ErrorMessage = "L'identifiant utilisateur est obligatoire.")]
+      
         public int UtilId { get; set; }
 
         [Required(ErrorMessage = "L'identifiant de la voiture est obligatoire.")]
@@ -14,7 +14,7 @@ namespace BackOnWay.Dtos.Utilisateur.Conducteur
         public DateOnly CovoitDate { get; set; }
 
         [Required(ErrorMessage = "Le numéro de l'adresse de départ est obligatoire.")]
-        public byte AdresseNumDepart { get; set; }
+        public int AdresseNumDepart { get; set; }
 
         [Required(ErrorMessage = "Le nom de rue de départ est obligatoire.")]
         [StringLength(60, ErrorMessage = "Le nom de rue ne peut pas dépasser 60 caractères.")]
@@ -32,7 +32,7 @@ namespace BackOnWay.Dtos.Utilisateur.Conducteur
         public string AdresseVilleDepart { get; set; }
 
         [Required(ErrorMessage = "Le numéro de l'adresse d'arrivée est obligatoire.")]
-        public byte AdresseNumArriver { get; set; }
+        public int AdresseNumArriver { get; set; }
 
         [Required(ErrorMessage = "Le nom de rue d'arrivée est obligatoire.")]
         [StringLength(60, ErrorMessage = "Le nom de rue ne peut pas dépasser 60 caractères.")]
