@@ -50,15 +50,35 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
             switch (reponse)
             {
                 case 1:
-                    return Conflict("Vous avez déjà un covoiturage de prévu à cette date");
+                    return StatusCode(409, new ProblemDetails
+                    {
+                        Title = "Conflit de date",
+                        Detail = "Vous avez déjà un covoiturage de prévu à cette date.",
+                        Status = StatusCodes.Status409Conflict
+                    });
                 case 2:
-                    return Conflict("Votre solde de crédit est insuffisant");
+                    return StatusCode(409, new ProblemDetails
+                    {
+                        Title = "Solde insuffisant",
+                        Detail = "Vous ne pouvez pas faire de réservation, car votre solde de crédit est insuffisant.",
+                        Status = StatusCodes.Status409Conflict
+                    });
                 case 3:
-                    return NoContent();
+                    return Ok(new { message = "Covoiturage ajouté" });
                 case 4:
-                    return StatusCode(500, "Une erreur s'est produite lors de la création du covoiturage !");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur interne",
+                        Detail = "Une erreur s'est produite lors de la création du covoiturage !",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
                 default:
-                    return StatusCode(520, "Une erreur inconnue est survenue.");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur inconnue",
+                        Detail = "Une erreur inconnue est survenue.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
             }
         }
     }
