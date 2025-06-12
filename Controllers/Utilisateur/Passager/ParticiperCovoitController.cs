@@ -1,4 +1,5 @@
-﻿using BackOnWay.Dtos.Utilisateur.Passager;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur.Passager;
 using BackOnWay.Metier.Utilisateur.Passager;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,9 +20,21 @@ namespace BackOnWay.Controllers.Utilisateur.Passager
         }
 
         // Endpoint HTTP POST pour insérer une réservation de covoiturage
-        [HttpPost]
-        public IActionResult InsertReservationCovoit(ParticiperCovoitDto unReservation)
+        [HttpPost("/participer-covoiturage")]
+        public IActionResult InsertReservationCovoit([FromBody] ParticiperCovoitDto unReservation)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+            unReservation.ResaUtil = util.UtilId;
+
             // Appel de la méthode métier pour insérer la réservation
             int reponse = _metier.InsertReservationCovoit(unReservation);
 
@@ -45,8 +58,8 @@ namespace BackOnWay.Controllers.Utilisateur.Passager
                         Status = StatusCodes.Status409Conflict
                     });
                 case 3:
-                    // 204 Created : succès 
-                    return Created();
+                    // 200  succès 
+                    return Ok(new { message = "Réservation enregistrée" });
                 case 4:
                     // 500 Internal Server Error : erreur technique
                     return StatusCode(500, new ProblemDetails

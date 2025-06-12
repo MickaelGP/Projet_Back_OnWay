@@ -5,7 +5,7 @@ namespace BackOnWay.Dtos.Utilisateur.Passager
 {
     public class ParticiperCovoitDto
     {     
-        public string ResaStatut { get; set; }
+        //public string ResaStatut { get; set; }
 
        
         [Required(ErrorMessage = "Le nombre de siége est requis.")]
@@ -15,7 +15,6 @@ namespace BackOnWay.Dtos.Utilisateur.Passager
         [Required(ErrorMessage = "La date est requise.")]
         public DateOnly ResaDate { get; set; }
 
-        [Required]
         public int ResaUtil { get; set; }
 
         [Required]

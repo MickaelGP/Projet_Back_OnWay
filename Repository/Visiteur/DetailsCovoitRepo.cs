@@ -75,13 +75,13 @@ namespace BackOnWay.Repository.Visiteur
                         CovoitMusique = (bool)reader["CovoitMusique"],
                         DepartAdresse = new Adresses
                         {
-                            AdresseNum = Convert.ToByte(reader["DepartNum"]),
+                            AdresseNum = Convert.ToInt32(reader["DepartNum"]),
                             AdresseRue = reader["DepartAdr"].ToString(),
                             AdresseVille = reader["DepartVille"].ToString()
                         },
                         ArriveAdresse = new Adresses
                         {
-                            AdresseNum = Convert.ToByte(reader["ArriveNum"]),
+                            AdresseNum = Convert.ToInt32(reader["ArriveNum"]),
                             AdresseRue = reader["ArriveAdr"].ToString(),
                             AdresseVille = reader["ArriveVille"].ToString()
                         },

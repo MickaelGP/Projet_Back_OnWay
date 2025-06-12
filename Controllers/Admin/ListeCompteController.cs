@@ -14,32 +14,61 @@ namespace BackOnWay.Controllers.Admin
     {
         private ListeCompteMetier _metier = new ListeCompteMetier();
 
-        [HttpGet]
+        [HttpGet("/liste-comptes")]
         public IActionResult GetListeCompte()
         {
             ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
             if (util == null || util.RoleLabel != "Admin")
             {
-                return Unauthorized("Accés refusé");
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
             }
             List<UtilisateurDto> utilisateurs = _metier.GetListeCompte();
             return Ok(utilisateurs);
         }
-        [HttpGet("{unId}")]
+        [HttpGet("/details-compte/{unId}")]
         public IActionResult SelectCompte(int unId)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
             UtilisateurDto unUtil = _metier.InfoCompte(unId);
 
             if (unUtil == null)
             {
-                return NotFound("Utilisateur non trouvé");
+                return StatusCode(404, new ProblemDetails
+                {
+                    Title = "Utilisateur inconnue",
+                    Detail = "Aucun Utilisateur trouvé.",
+                    Status = StatusCodes.Status404NotFound
+                });
             }
 
             return Ok(unUtil);
         }
-        [HttpPost("ajout")]
+        [HttpPost("/ajout-compte-employé")]
         public IActionResult AjoutEmploye([FromBody] AddEmployeDto unEmploye)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return StatusCode(401, new ProblemDetails { 
+                    Title = "Token manquant", 
+                    Detail = "Utilisateur non connecté.", 
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
             if (unEmploye == null)
             {
                 return new JsonResult("L'élément n'est pas valide");
@@ -63,9 +92,19 @@ namespace BackOnWay.Controllers.Admin
                     return StatusCode(520, "Une erreur inconnue est survenue.");
             }
         }
-        [HttpDelete("delete")]
+        [HttpDelete("/delete-compte-employé")]
         public IActionResult SupEmployeCpte([FromBody] int unId)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
             if (unId == 0)
             {
                 return BadRequest("L'élément n'est pas valide");
@@ -82,9 +121,19 @@ namespace BackOnWay.Controllers.Admin
 
         }
 
-        [HttpPut("update")]
+        [HttpPut("/update-compte")]
         public IActionResult MajStatut([FromBody] UpdateUtilDto unUtil)
         {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
             if (unUtil == null)
             {
                 return BadRequest("L'élément n'est pas valide");
@@ -96,7 +145,7 @@ namespace BackOnWay.Controllers.Admin
                 return StatusCode(500, "Une erreur s'est produite lors de la mise à jour du statut de l'utilisateur.");
             }
 
-            return NoContent();
+            return Ok(new {message = "Statut mis à jour"});
 
         }
     }
