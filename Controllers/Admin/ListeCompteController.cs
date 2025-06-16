@@ -69,11 +69,7 @@ namespace BackOnWay.Controllers.Admin
                     Status = StatusCodes.Status401Unauthorized
                 });
             }
-            if (unEmploye == null)
-            {
-                return new JsonResult("L'élément n'est pas valide");
-            }
-
+         
             string mdpHash = BCrypt.Net.BCrypt.HashPassword(unEmploye.UtilMdp, 12);
             unEmploye.UtilMdp = mdpHash;
 
@@ -82,14 +78,29 @@ namespace BackOnWay.Controllers.Admin
             switch (ajouter)
             {
                 case 0:
-                    return Conflict("L'employé existe déjà.");
+                    return StatusCode(409, new ProblemDetails
+                    {
+                        Title = "Compte déjà existant",
+                        Detail = "L'employé existe déjà",
+                        Status = StatusCodes.Status409Conflict
+                    });
                 case 1:
                     new SendMailUtils().SendEmailNewEmploye(unEmploye);
-                    return Created("", "Ajout effectué avec succès !");
+                    return Ok(new { message = "Employé ajouté" });
                 case 2:
-                    return StatusCode(500, "Une erreur s'est produite lors de l'ajout de l'employé.");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur lors de l'ajout",
+                        Detail = "Une erreur s'est produite lors de l'ajout de l'employé.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
                 default:
-                    return StatusCode(520, "Une erreur inconnue est survenue.");
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur inconnue",
+                        Detail = "Une erreur inconnue est survenue.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
             }
         }
         [HttpDelete("/delete-compte-employé")]
@@ -105,19 +116,19 @@ namespace BackOnWay.Controllers.Admin
                     Status = StatusCodes.Status401Unauthorized
                 });
             }
-            if (unId == 0)
-            {
-                return BadRequest("L'élément n'est pas valide");
-            }
             bool supprimer = _metier.SupEmployeCpte(unId);
-            string reponse;
 
             if (!supprimer)
             {
-                return StatusCode(500, "Une erreur s'est produite lors de la suppression du compte de l'employé.");
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Une erreur est survenue",
+                    Detail = "Une erreur s'est produite lors de la suppression du compte de l'employé.",
+                    Status = StatusCodes.Status500InternalServerError
+                });
             }
 
-            return NoContent();
+            return Ok(new {message = "Utilisateur supprimé"});
 
         }
 

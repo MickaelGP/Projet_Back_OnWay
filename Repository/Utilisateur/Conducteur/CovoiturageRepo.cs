@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using System.Runtime.Intrinsics.Arm;
 using BackOnWay.Models;
 using Microsoft.Data.SqlClient;
 
@@ -23,12 +24,12 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT Covoitid, CovoitDate, CovoitDep, CovoitArr, dep.AdresseVille AS DepartVille, arr.AdresseVille AS ArriveVille, CovoitStatut FROM covoiturages " +
+            cmd.CommandText = "SELECT Covoitid, CovoitDate, CovoitDep, CovoitArr, dep.AdresseVille AS DepartVille, arr.AdresseVille AS ArriveVille, CovoitStatut FROM utilisateurs " +
+                "INNER JOIN conducteurs ON ConducUtil = UtilId " +
+                "INNER JOIN voitures ON VoitConduc = ConducId " +
+                "INNER JOIN covoiturages ON CovoitVoiture = VoitId " +
                 "INNER JOIN adresses AS dep ON DepartAdresse = dep.AdresseId " +
                 "INNER JOIN adresses AS arr ON ArriveAdresse = arr.AdresseId " +
-                "INNER JOIN voitures ON CovoitVoiture = VoitId " +
-                "INNER JOIN conducteurs ON VoitConduc = ConducId " +
-                "INNER JOIN utilisateurs ON ConducId = UtilId " +
                 "WHERE UtilId = @UtilId";
 
             SqlParameter UtilId = cmd.Parameters.Add("@UtilId", SqlDbType.Int);

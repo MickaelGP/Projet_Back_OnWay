@@ -9,7 +9,7 @@ namespace BackOnWay.Dtos.Admin
         public string UtilNom { get; set; }
 
         [Required(ErrorMessage = "Le prénom est requis")]
-        [StringLength(50, MinimumLength = 5, ErrorMessage = "Le nombre de caractère doit être compris entre 5 et  50 caractères.")]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Le nombre de caractère doit être compris entre 5 et  50 caractères.")]
         public string UtilPrenom { get; set; }
 
         [Required(ErrorMessage = "L'adresse email est requis.")]

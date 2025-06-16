@@ -1,4 +1,5 @@
-﻿using BackOnWay.Dtos.Utilisateur.Conducteur;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -30,14 +31,20 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         }
 
         [HttpGet("/les-covoiturages")]
-        public IActionResult GetAllCovoitByUtilId(int unId)
+        public IActionResult GetAllCovoitByUtilId()
         {
-            List<GetListeCovoitByUtilIdDto> listeCovoits = _metier.GetAllCovoitByUtilId(unId);
-
-            if (listeCovoits.Count == 0)
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
             {
-                return NotFound();
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
             }
+            int unId = util.UtilId;
+            List<GetListeCovoitByUtilIdDto> listeCovoits = _metier.GetAllCovoitByUtilId(unId);
 
             return Ok(listeCovoits);
         }
