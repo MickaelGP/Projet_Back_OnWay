@@ -27,5 +27,7 @@ namespace BackOnWay.Dtos.Utilisateur.Conducteur
         
         [Required]
         public bool CovoitAnimaux { get; set; }
+
+        public string CovoitStatut { get; set; }
     }
 }

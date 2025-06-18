@@ -1,4 +1,5 @@
-﻿using BackOnWay.Dtos.Utilisateur.Conducteur;
+﻿using BackOnWay.Dtos.Auth;
+using BackOnWay.Dtos.Utilisateur.Conducteur;
 using BackOnWay.Metier.Utilisateur.Conducteur;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -15,6 +16,31 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         {
             _metier = metier;
         }
+        [HttpGet("/update-covoiturage/{unId}")]
+        public IActionResult GetInfoCovoitById(int unId)
+        {
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+            if (util == null)
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+            UpdateCovoitDto unCovoit = _metier.GetInfoCovoitById(unId);
+            if (unCovoit == null) {
+                return StatusCode(404, new ProblemDetails
+                {
+                    Detail = "Covoiturage non trouvé",
+                    Title = "Aucun covoiturage n'a été trouvé",
+                    Status = StatusCodes.Status404NotFound
+                });
+            }
+            return Ok(unCovoit);
+        }
+
 
         [HttpPut]
         public IActionResult UpdateCovoit([FromBody] UpdateCovoitDto updateCovoit)

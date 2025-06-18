@@ -13,7 +13,43 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             Connexion maConnexion = new Connexion();
             _connexion = maConnexion.GetConnection();
         }
+        public Covoiturages GetInfoCovoitById(int unId)
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                _connexion.Open();
+            }
 
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "SELECT CovoitId, CovoitPrix, CovoitDate, CovoitDep, CovoitArr, CovoitFumeur, CovoitAnimaux, CovoitMusique, CovoitStatut FROM covoiturages WHERE CovoitId = @CovoitId ";
+
+            SqlParameter CovoitId = cmd.Parameters.Add("CovoitId", SqlDbType.Int);
+            
+            CovoitId.Value = unId;
+
+            Covoiturages unCovoiturage = null;
+
+            SqlDataReader reader = cmd.ExecuteReader();
+
+            while (reader.Read()) {
+                unCovoiturage = new Covoiturages
+                {
+                    CovoitId = (int)reader["CovoitId"],
+                    CovoitPrix = Convert.ToDouble(reader["CovoitPrix"]),
+                    CovoitDate = DateOnly.FromDateTime((DateTime)reader["CovoitDate"]),
+                    CovoitDep = TimeOnly.FromTimeSpan((TimeSpan)reader["CovoitDep"]),
+                    CovoitArr = TimeOnly.FromTimeSpan((TimeSpan)reader["CovoitArr"]),
+                    CovoitAnimaux = (bool)reader["CovoitAnimaux"],
+                    CovoitFumeur = (bool)reader["CovoitFumeur"],
+                    CovoitMusique = (bool)reader["CovoitMusique"],
+                    CovoitStatut = reader["CovoitStatut"].ToString()
+                };
+            }
+            this._connexion.Close();
+
+            return unCovoiturage;
+        }
         public string GetStatutCovoit(int unCovoitId)
         {
             if (_connexion == null || _connexion.State == ConnectionState.Closed)

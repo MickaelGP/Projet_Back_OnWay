@@ -13,6 +13,31 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
             _repo = repo;
         }
 
+        public UpdateCovoitDto GetInfoCovoitById(int unId)
+        {
+            Covoiturages covoiturage = _repo.GetInfoCovoitById(unId);
+
+            UpdateCovoitDto unCovoiturage = null;
+
+            if (covoiturage != null)
+            {
+                unCovoiturage = new UpdateCovoitDto
+                {
+                    CovoitId = covoiturage.CovoitId,
+                    CovoitPrix = covoiturage.CovoitPrix,
+                    CovoitDate = covoiturage.CovoitDate,
+                    CovoitDep = covoiturage.CovoitDep,
+                    CovoitArr = covoiturage.CovoitArr,
+                    CovoitAnimaux = covoiturage.CovoitAnimaux,
+                    CovoitFumeur = covoiturage.CovoitFumeur,
+                    CovoitMusique = covoiturage.CovoitMusique,
+                    CovoitStatut = covoiturage.CovoitStatut,
+                };
+            }
+
+            return unCovoiturage;
+        }
+
         public int UpdateCovoit(UpdateCovoitDto infoCovoit)
         {
             int resultat;
