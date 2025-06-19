@@ -42,7 +42,7 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
         {
             int resultat;
             string covoitStatut = _repo.GetStatutCovoit(infoCovoit.CovoitId);
-            if (covoitStatut == "N/C" || covoitStatut == null || covoitStatut != "En attente")
+            if (covoitStatut == "N/C" || covoitStatut == null || (covoitStatut != "En attente" && covoitStatut != "Démarré"))
             {
                 // Impossible covoit en cours
                 resultat = 1;
@@ -59,6 +59,7 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
                     CovoitFumeur = infoCovoit.CovoitFumeur,
                     CovoitAnimaux = infoCovoit.CovoitAnimaux,
                     CovoitMusique = infoCovoit.CovoitMusique,
+                    CovoitStatut = infoCovoit.CovoitStatut,
                 };
                 int updateCovoit = _repo.UpdateCovoit(unCovoit);
                 if (updateCovoit >= 1)

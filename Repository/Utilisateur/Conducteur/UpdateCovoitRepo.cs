@@ -90,7 +90,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "UPDATE covoiturages SET CovoitPrix = @CovoitPrix, CovoitDate = @CovoitDate, CovoitDep = @CovoitDep, CovoitArr = @CovoitArr, CovoitFumeur = @CovoitFumeur, CovoitAnimaux = @CovoitAnimaux, CovoitMusique = @CovoitMusique WHERE CovoitId = @CovoitId";
+            cmd.CommandText = "UPDATE covoiturages SET CovoitPrix = @CovoitPrix, CovoitDate = @CovoitDate, CovoitDep = @CovoitDep, CovoitArr = @CovoitArr, CovoitFumeur = @CovoitFumeur, CovoitAnimaux = @CovoitAnimaux, CovoitMusique = @CovoitMusique,  CovoitStatut = @CovoitStatut WHERE CovoitId = @CovoitId";
 
             SqlParameter CovoitId = cmd.Parameters.Add("@CovoitId", SqlDbType.Int);
             SqlParameter CovoitPrix = cmd.Parameters.Add("@CovoitPrix", SqlDbType.Money);
@@ -100,6 +100,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             SqlParameter CovoitFumeur = cmd.Parameters.Add("@CovoitFumeur", SqlDbType.Bit);
             SqlParameter CovoitAnimaux = cmd.Parameters.Add("@CovoitAnimaux", SqlDbType.Bit);
             SqlParameter CovoitMusique = cmd.Parameters.Add("@CovoitMusique", SqlDbType.Bit);
+            SqlParameter CovoitStatut = cmd.Parameters.Add("@CovoitStatut", SqlDbType.VarChar);
 
             CovoitId.Value = infoCovoit.CovoitId;
             CovoitPrix.Value = infoCovoit.CovoitPrix;
@@ -109,6 +110,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             CovoitFumeur.Value = infoCovoit.CovoitFumeur;
             CovoitMusique.Value = infoCovoit.CovoitMusique;
             CovoitAnimaux.Value = infoCovoit.CovoitAnimaux;
+            CovoitStatut.Value = infoCovoit.CovoitStatut;
 
             int resultat = cmd.ExecuteNonQuery();
 

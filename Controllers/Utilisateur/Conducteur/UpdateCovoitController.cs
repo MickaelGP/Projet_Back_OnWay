@@ -42,7 +42,7 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
         }
 
 
-        [HttpPut]
+        [HttpPut("/update-trajet")]
         public IActionResult UpdateCovoit([FromBody] UpdateCovoitDto updateCovoit)
         {
             int reponse = _metier.UpdateCovoit(updateCovoit);
@@ -51,15 +51,15 @@ namespace BackOnWay.Controllers.Utilisateur.Conducteur
             {
                 case 1:
                     // 409 Conflict : Covoiturage non terminé
-                    return Conflict(new ProblemDetails
+                    return StatusCode(409, new ProblemDetails
                     {
-                        Title = "Covoiturage en cours",
-                        Detail = "La modification du covoiturage n'est pas possible car le covoiturage est en cours",
+                        Title = "Covoiturage terminé",
+                        Detail = "La modification du covoiturage n'est pas possible car le covoiturage est terminé",
                         Status = StatusCodes.Status409Conflict
                     });
                 case 2:
-                    // 204 Created : succès 
-                    return Created();
+                    // 200
+                    return Ok(new {message = "Trajet modifié"});
                 case 3:
                     // 500 Internal Server Error : erreur technique
                     return StatusCode(500, new ProblemDetails
