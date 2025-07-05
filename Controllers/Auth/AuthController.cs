@@ -56,7 +56,7 @@ namespace BackOnWay.Controllers.Auth
                 Response.Cookies.Append("session_token", session.Token, new CookieOptions
                 {
                     HttpOnly = true,
-                    Secure = false,
+                    Secure = true,
                     SameSite = SameSiteMode.Lax,
                     Expires = DateTimeOffset.UtcNow.AddHours(1),
                     Path= "/"

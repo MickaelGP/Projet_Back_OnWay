@@ -12,8 +12,66 @@ namespace BackOnWay.Controllers.Admin
     [ApiController]
     public class ListeCompteController : ControllerBase
     {
+        // Appel à la couche métier pour le traitement des employés
         private ListeCompteMetier _metier = new ListeCompteMetier();
 
+        // Endpoint pour l’ajout d’un nouvel employé via une requête POST
+        [HttpPost("/ajout-compte-employé")]
+        public IActionResult AjoutEmploye([FromBody] AddEmployeDto unEmploye)
+        {
+            // Récupère les infos de l’utilisateur connecté depuis le contexte HTTP
+            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
+
+            // Vérifie si l’utilisateur est connecté et possède le rôle "Admin"
+            if (util == null || util.RoleLabel != "Admin")
+            {
+                return StatusCode(401, new ProblemDetails
+                {
+                    Title = "Token manquant",
+                    Detail = "Utilisateur non connecté.",
+                    Status = StatusCodes.Status401Unauthorized
+                });
+            }
+            // Hachage du mot de passe de l’employé pour garantir sa sécurité
+            string mdpHash = BCrypt.Net.BCrypt.HashPassword(unEmploye.UtilMdp, 12);
+            unEmploye.UtilMdp = mdpHash;
+
+            // Appel de la méthode métier pour ajouter l’employé
+            int ajouter = _metier.AjoutEmploye(unEmploye);
+
+            // Traitement du code de retour pour adapter la réponse HTTP
+            switch (ajouter)
+            {
+                // Cas où l’employé existe déjà
+                case 0:
+                    return StatusCode(409, new ProblemDetails
+                    {
+                        Title = "Compte déjà existant",
+                        Detail = "L'employé existe déjà",
+                        Status = StatusCodes.Status409Conflict
+                    });
+                // Cas où l’ajout est réussi : on envoie un mail de bienvenue
+                case 1:
+                    new SendMailUtils().SendEmailNewEmploye(unEmploye);
+                    return Ok(new { message = "Employé ajouté" });
+                // Erreur lors de l'ajout en base
+                case 2:
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur lors de l'ajout",
+                        Detail = "Une erreur s'est produite lors de l'ajout de l'employé.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
+                default:
+                    // Cas inattendu
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Erreur inconnue",
+                        Detail = "Une erreur inconnue est survenue.",
+                        Status = StatusCodes.Status500InternalServerError
+                    });
+            }
+        }
         [HttpGet("/liste-comptes")]
         public IActionResult GetListeCompte()
         {
@@ -57,52 +115,6 @@ namespace BackOnWay.Controllers.Admin
 
             return Ok(unUtil);
         }
-        [HttpPost("/ajout-compte-employé")]
-        public IActionResult AjoutEmploye([FromBody] AddEmployeDto unEmploye)
-        {
-            ConnexionInfoDto? util = HttpContext.Items["Utilisateur"] as ConnexionInfoDto;
-            if (util == null || util.RoleLabel != "Admin")
-            {
-                return StatusCode(401, new ProblemDetails { 
-                    Title = "Token manquant", 
-                    Detail = "Utilisateur non connecté.", 
-                    Status = StatusCodes.Status401Unauthorized
-                });
-            }
-         
-            string mdpHash = BCrypt.Net.BCrypt.HashPassword(unEmploye.UtilMdp, 12);
-            unEmploye.UtilMdp = mdpHash;
-
-            int ajouter = _metier.AjoutEmploye(unEmploye);
-
-            switch (ajouter)
-            {
-                case 0:
-                    return StatusCode(409, new ProblemDetails
-                    {
-                        Title = "Compte déjà existant",
-                        Detail = "L'employé existe déjà",
-                        Status = StatusCodes.Status409Conflict
-                    });
-                case 1:
-                    new SendMailUtils().SendEmailNewEmploye(unEmploye);
-                    return Ok(new { message = "Employé ajouté" });
-                case 2:
-                    return StatusCode(500, new ProblemDetails
-                    {
-                        Title = "Erreur lors de l'ajout",
-                        Detail = "Une erreur s'est produite lors de l'ajout de l'employé.",
-                        Status = StatusCodes.Status500InternalServerError
-                    });
-                default:
-                    return StatusCode(500, new ProblemDetails
-                    {
-                        Title = "Erreur inconnue",
-                        Detail = "Une erreur inconnue est survenue.",
-                        Status = StatusCodes.Status500InternalServerError
-                    });
-            }
-        }
         [HttpDelete("/delete-compte-employé")]
         public IActionResult SupEmployeCpte([FromBody] int unId)
         {
@@ -128,7 +140,7 @@ namespace BackOnWay.Controllers.Admin
                 });
             }
 
-            return Ok(new {message = "Utilisateur supprimé"});
+            return Ok(new { message = "Utilisateur supprimé" });
 
         }
 
@@ -156,7 +168,7 @@ namespace BackOnWay.Controllers.Admin
                 return StatusCode(500, "Une erreur s'est produite lors de la mise à jour du statut de l'utilisateur.");
             }
 
-            return Ok(new {message = "Statut mis à jour"});
+            return Ok(new { message = "Statut mis à jour" });
 
         }
     }

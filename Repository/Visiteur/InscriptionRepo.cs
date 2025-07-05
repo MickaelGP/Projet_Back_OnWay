@@ -28,7 +28,8 @@ namespace BackOnWay.Repository.Visiteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "INSERT INTO utilisateurs (UtilPseudo,  UtilPrenom,  UtilNom, UtilNaissance, UtilCredit, UtilEmail, UtilTelephone, UtilMdp,  UtilGenre, UtilRole) VALUES (@UtilPseudo, @UtilPrenom, @UtilNom, @UtilNaissance, @UtilCredit, @UtilEmail, @UtilTelephone, @UtilMdp, @UtilGenre, @UtilRole)";
+            cmd.CommandText = "INSERT INTO utilisateurs (UtilPseudo,  UtilPrenom,  UtilNom, UtilNaissance, UtilCredit, UtilEmail, UtilTelephone, UtilMdp,  UtilGenre, UtilRole) VALUES " +
+                "(@UtilPseudo, @UtilPrenom, @UtilNom, @UtilNaissance, @UtilCredit, @UtilEmail, @UtilTelephone, @UtilMdp, @UtilGenre, @UtilRole)";
 
             SqlParameter UtilPseudo = cmd.Parameters.Add("@UtilPseudo", SqlDbType.VarChar);
             SqlParameter UtilPrenom = cmd.Parameters.Add("@UtilPrenom", SqlDbType.VarChar);

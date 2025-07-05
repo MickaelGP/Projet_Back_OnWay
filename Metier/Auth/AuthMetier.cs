@@ -40,7 +40,7 @@ namespace BackOnWay.Metier.Auth
                         SessionCreer = DateTime.Now,
                         SessionFin = DateTime.Now.AddHours(1),
                     };
-                    //Ajouter la session en dbb
+                    //Ajouter la session en bdd
                     int createSession = _repo.CreateSession(unSession);
                     if (createSession == 0)
                     {
