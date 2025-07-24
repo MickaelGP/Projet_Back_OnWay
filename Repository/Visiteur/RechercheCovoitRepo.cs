@@ -32,15 +32,17 @@ namespace BackOnWay.Repository.Visiteur
                 "INNER JOIN adresses AS arr ON arr.AdresseId = ArriveAdresse " +
                 "WHERE dep.AdresseVille = @VilleDepart " +
                 "AND  arr.AdresseVille =  @VilleArriver " +
-                "AND CovoitDate = @Date";
+                "AND CovoitDate = @Date AND CovoitStatut = @CovoitStatut";
 
             SqlParameter VilleDepart = cmd.Parameters.Add("@VilleDepart", SqlDbType.VarChar);
             SqlParameter VilleArriver = cmd.Parameters.Add("@VilleArriver", SqlDbType.VarChar);
             SqlParameter Date = cmd.Parameters.Add("@Date", SqlDbType.Date);
+            SqlParameter CovoitStatut = cmd.Parameters.Add("@CovoitStatut", SqlDbType.VarChar);
 
             VilleDepart.Value = covoiturages.DepartAdresse.AdresseVille;
             VilleArriver.Value = covoiturages.ArriveAdresse.AdresseVille;
             Date.Value = covoiturages.CovoitDate;
+            CovoitStatut.Value = "En attente";
 
             SqlDataReader reader = cmd.ExecuteReader();
             List<Covoiturages> Covoiturages = new List<Covoiturages>();
@@ -108,15 +110,18 @@ namespace BackOnWay.Repository.Visiteur
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT CovoitPrix, CovoitId, CovoitDate, dep.AdresseVille AS VilleDepart, arr.AdresseVille AS VilleArriver, CovoitDep, CovoitArr FROM covoiturages INNER JOIN adresses AS dep ON dep.AdresseId = DepartAdresse INNER JOIN adresses AS arr ON arr.AdresseId = ArriveAdresse WHERE dep.AdresseCP LIKE @AdresseCP  AND  arr.AdresseVille =  @VilleArriver AND CovoitDate = @Date";
+            cmd.CommandText = "SELECT CovoitPrix, CovoitId, CovoitDate, dep.AdresseVille AS VilleDepart, arr.AdresseVille AS VilleArriver, CovoitDep, CovoitArr FROM covoiturages INNER JOIN adresses AS dep ON dep.AdresseId = DepartAdresse INNER JOIN adresses AS arr ON arr.AdresseId = ArriveAdresse WHERE dep.AdresseCP LIKE @AdresseCP  AND  arr.AdresseVille =  @VilleArriver AND CovoitDate = @Date AND CovoitStatut = @CovoitStatut";
 
             SqlParameter AdresseCP = cmd.Parameters.Add("@AdresseCP", SqlDbType.Char);
             SqlParameter VilleArriver = cmd.Parameters.Add("@VilleArriver", SqlDbType.VarChar);
             SqlParameter Date = cmd.Parameters.Add("@Date", SqlDbType.Date);
+            SqlParameter CovoitStatut = cmd.Parameters.Add("@CovoitStatut", SqlDbType.VarChar);
+
 
             AdresseCP.Value = unCp + "%";
             VilleArriver.Value = covoiturage.ArriveAdresse.AdresseVille;
             Date.Value = covoiturage.CovoitDate;
+            CovoitStatut.Value = "En attente";
 
             SqlDataReader reader = cmd.ExecuteReader();
             List<Covoiturages> covoiturages = new List<Covoiturages>();
