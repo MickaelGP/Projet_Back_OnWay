@@ -4,27 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Employe
 {
-    public class ValidAvisRepo
+    public class ValidAvisRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public ValidAvisRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public List<Avis> GetAllAvis()
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             List<Avis> listeAvis = new List<Avis>();
 
@@ -47,16 +31,13 @@ namespace BackOnWay.Repository.Employe
                 };
                 listeAvis.Add(unAvis);
             }
-            _connexion.Close();
+            DbDeconnecter();
 
             return listeAvis;
         }
         public Avis SelectAvisById(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -93,17 +74,14 @@ namespace BackOnWay.Repository.Employe
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return unAvis;
         }
 
         public int UpdateStatutAvis(Avis unAvis)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -117,7 +95,7 @@ namespace BackOnWay.Repository.Employe
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

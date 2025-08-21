@@ -5,27 +5,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Auth
 {
-    public class AuthRepo
+    public class AuthRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public AuthRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public Utilisateurs Connexion(string unEmail)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -53,17 +37,14 @@ namespace BackOnWay.Repository.Auth
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return infoUtilisateur;
         }
 
         public int CreateSession(Sessions unSession)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -81,16 +62,13 @@ namespace BackOnWay.Repository.Auth
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
         public int Deconnexion(string unToken)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -102,17 +80,14 @@ namespace BackOnWay.Repository.Auth
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter() ;   
 
             return resultat;
         }
 
         public ConnexionInfoDto? GetUtilByToken(string token)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -139,7 +114,7 @@ namespace BackOnWay.Repository.Auth
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return infoUtil;
         }

@@ -17,7 +17,7 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
         {
             Covoiturages covoiturage = _repo.GetInfoCovoitById(unId);
 
-            UpdateCovoitDto unCovoiturage = null;
+            UpdateCovoitDto? unCovoiturage = null;
 
             if (covoiturage != null)
             {
@@ -34,7 +34,6 @@ namespace BackOnWay.Metier.Utilisateur.Conducteur
                     CovoitStatut = covoiturage.CovoitStatut,
                 };
             }
-
             return unCovoiturage;
         }
 

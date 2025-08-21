@@ -4,27 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
-    public class AjoutCovoiturageRepo
+    public class AjoutCovoiturageRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public AjoutCovoiturageRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public int InsertCovoiturage(Covoiturages unCovoiturage)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -57,17 +41,14 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int reponse = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return reponse;
         }
 
         public int UpdateSoldeCredit(int unId, int unSolde)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+           DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -82,17 +63,14 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int InsertAdresse(Adresses unAdresse)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -110,16 +88,13 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
         public int CheckSoldeCredit(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -131,17 +106,14 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = Convert.ToInt32(cmd.ExecuteScalar());
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int CheckIfVoitureIsInCovoiturage(int voitId, DateOnly covoitDate)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+           DbConnecter() ;
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -165,16 +137,13 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
                 reponse = (int)resultat;
             }
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return reponse;
         }
         public List<Voitures> GetUtilVoitures(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+           DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -207,7 +176,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             reader.Close();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return listeVoitures;
         }

@@ -4,26 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Visiteur
 {
-    public class RechercheCovoitRepo
+    public class RechercheCovoitRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public RechercheCovoitRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
         public List<Covoiturages> GetExactCovoiturages(Covoiturages covoiturages)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -70,16 +55,13 @@ namespace BackOnWay.Repository.Visiteur
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return Covoiturages;
         }
-        public string GetCodePostal(string unVille)
+        public string? GetCodePostal(string unVille)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+         DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -91,22 +73,19 @@ namespace BackOnWay.Repository.Visiteur
 
             SqlDataReader reader = cmd.ExecuteReader();
 
-            string resultat = null;
+            string? resultat = null;
             while (reader.Read())
             {
                 resultat = reader["AdresseCP"].ToString();
             }
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
         public List<Covoiturages> GetAlternatifCovoit(Covoiturages covoiturage, string unCp)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter() ;
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -149,7 +128,7 @@ namespace BackOnWay.Repository.Visiteur
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return covoiturages;
         }

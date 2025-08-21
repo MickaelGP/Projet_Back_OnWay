@@ -4,37 +4,15 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
-    public class AjoutVoitureRepo
+    public class AjoutVoitureRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        /// <summary>
-        /// Initialise la connexion à la base de données.
-        /// </summary>
-        public AjoutVoitureRepo()
-        {
-            DbConnecter();
-        }
-
-        /// <summary>
-        /// Initialise ou renouvelle la connexion SQL.
-        /// </summary>
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         /// <summary>
         /// Récupère toutes les couleurs qui existent en BDD
         /// </summary>
         /// <returns>Une liste de couleurs</returns>
         public List<Couleurs> GetAllCouleurs()
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -55,7 +33,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             }
             reader.Close();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return listeCouleurs;
         }
@@ -66,10 +44,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
         /// <returns>Une liste de modéles</returns>
         public List<Modeles> GetAllModeles()
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -90,7 +65,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             }
             reader.Close();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return listeModeles;
         }
@@ -101,10 +76,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
         /// <returns>Nombre de lignes insérées. -1 si erreur.</returns>
         public int InsertVoiture(Voitures unVoiture)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -128,7 +100,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
@@ -140,10 +112,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
         /// <returns>L'identifiant du conducteur créer</returns>
         public int InsertConduc(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -157,7 +126,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
 
@@ -170,10 +139,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
         /// <returns>Identifiant du conducteur s'il existe, -1 sinon.</returns>
         public int CheckUtilIsConduc(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -191,7 +157,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
             }
             reader.Close();
 
-            _connexion.Close();
+            DbDeconnecter() ;
 
             return resultat;
         }

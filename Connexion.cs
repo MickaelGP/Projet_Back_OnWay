@@ -1,20 +1,42 @@
 ﻿using BackOnWay.Config;
 using Microsoft.Data.SqlClient;
+using System.Data;
 
 namespace BackOnWay
 {
-    public class Connexion
+    public abstract class Connexion
     {
 
-        private string ConnexionString = new Settings().GetDbString();
+        private readonly string ConnexionString;
 
-        public SqlConnection GetConnection()
+        protected SqlConnection? _connexion;
+
+        public Connexion()
         {
-            SqlConnection connexion = new SqlConnection(ConnexionString);
+            ConnexionString = new Settings().GetDbString();
+        }
 
-            connexion.Open();
+        protected void DbConnecter()
+        {
+            if (_connexion == null || _connexion.State == ConnectionState.Closed)
+            {
+                this.GetConnection();
+            }
+        }
+        protected void DbDeconnecter()
+        {
+            if (_connexion != null && _connexion.State != ConnectionState.Closed)
+            {
+               _connexion.Close();
+            }
+        }
 
-            return connexion;
+        private void  GetConnection()
+        {
+            _connexion = new SqlConnection(ConnexionString);
+
+           _connexion.Open();
+
         }
     }
 }

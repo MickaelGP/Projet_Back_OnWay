@@ -4,27 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Utilisateur
 {
-    public class ProfilRepo
+    public class ProfilRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public ProfilRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public Utilisateurs GetProfilUtil(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -55,17 +39,14 @@ namespace BackOnWay.Repository.Utilisateur
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int UpdateProfil(Utilisateurs unProfil)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -91,16 +72,14 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
+
             return resultat;
         }
 
         public int UpdateMdpUtil(Utilisateurs mdpUtil)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -114,17 +93,15 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public string GetOldMdpUtil(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
+
             string resultat = " ";
 
             SqlCommand cmd = _connexion.CreateCommand();
@@ -141,16 +118,13 @@ namespace BackOnWay.Repository.Utilisateur
                 resultat = reader["UtilMdp"].ToString();
             }
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
         public int DeleteProfilUtil(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+         DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -162,16 +136,13 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
         public int CheckExistEmail(string unEmail)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+           DbConnecter() ;
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -183,7 +154,7 @@ namespace BackOnWay.Repository.Utilisateur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            _connexion.Close();
+            DbDeconnecter() ;
 
             return resultat;
         }

@@ -4,27 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Employe
 {
-    public class ReclamationRepo
+    public class ReclamationRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public ReclamationRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public List<Plaintes> GetAllPlaintes()
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             List<Plaintes> listePlaintes = new List<Plaintes>();
 
@@ -44,16 +28,13 @@ namespace BackOnWay.Repository.Employe
                 };
                 listePlaintes.Add(unePlainte);
             }
-            this._connexion.Close();
+            DbDeconnecter();
 
             return listePlaintes;
         }
         public Plaintes GetPlainteById(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -86,16 +67,13 @@ namespace BackOnWay.Repository.Employe
                     }
                 };
             }
-            this._connexion.Close();
+            DbDeconnecter();
 
             return unePlainte;
         }
         public int UpdateStatutPlainte(Plaintes unePlainte)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -109,7 +87,7 @@ namespace BackOnWay.Repository.Employe
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

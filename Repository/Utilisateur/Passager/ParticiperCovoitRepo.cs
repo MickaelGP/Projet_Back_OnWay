@@ -4,22 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Passager
 {
-    public class ParticiperCovoitRepo : IParticiperCovoitRepo
+    public class ParticiperCovoitRepo : Connexion , IParticiperCovoitRepo
     {
-        private readonly SqlConnection _connexion;
-
-        public ParticiperCovoitRepo()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public int GetNbSiegeRestant(int unCovoitId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -42,17 +31,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int GetSoldeUtil(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -72,17 +58,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int InsertReservationCovoit(Reservations uneReservation)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -103,17 +86,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int UpdateSoleCreditUtil(int unId, int unSolde)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+           DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -127,7 +107,7 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

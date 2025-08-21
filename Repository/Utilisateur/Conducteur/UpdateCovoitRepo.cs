@@ -4,21 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Conducteur
 {
-    public class UpdateCovoitRepo : IUpdateCovoitRepo
+    public class UpdateCovoitRepo : Connexion, IUpdateCovoitRepo
     {
-        private readonly SqlConnection _connexion;
-
-        public UpdateCovoitRepo()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
         public Covoiturages GetInfoCovoitById(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -46,16 +36,13 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
                     CovoitStatut = reader["CovoitStatut"].ToString()
                 };
             }
-            this._connexion.Close();
+            DbDeconnecter();
 
             return unCovoiturage;
         }
         public string GetStatutCovoit(int unCovoitId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+           DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -76,17 +63,14 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int UpdateCovoit(Covoiturages infoCovoit)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -114,7 +98,7 @@ namespace BackOnWay.Repository.Utilisateur.Conducteur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

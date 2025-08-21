@@ -4,27 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Visiteur
 {
-    public class InscriptionRepo
+    public class InscriptionRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public InscriptionRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public int CreateCompte(Utilisateurs unUtilisateur)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -55,17 +39,14 @@ namespace BackOnWay.Repository.Visiteur
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int CheckExistEmail(string unEmail)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -77,7 +58,7 @@ namespace BackOnWay.Repository.Visiteur
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

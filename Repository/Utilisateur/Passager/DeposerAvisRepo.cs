@@ -4,22 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Passager
 {
-    public class DeposerAvisRepo : IDeposerAvisRepo
+    public class DeposerAvisRepo : Connexion, IDeposerAvisRepo
     {
-        private readonly SqlConnection _connexion;
-
-        public DeposerAvisRepo()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public Covoiturages GetUtilIdAndStatutCovoit(int unCovoitId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -57,17 +46,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return unCovoit;
         }
 
         public int InsertAvis(Avis unAvis)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -89,7 +75,7 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             int resultat = cmd.ExecuteNonQuery();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

@@ -4,27 +4,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Visiteur
 {
-    public class DetailsCovoitRepo
+    public class DetailsCovoitRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public DetailsCovoitRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public Covoiturages GetInfoCovoit(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -120,17 +104,14 @@ namespace BackOnWay.Repository.Visiteur
                 unCovoiturage.Voiture.Conducteurs.Utilisateur.NombreCom = nombreCommentaires;
             }
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return unCovoiturage;
         }
 
         public List<Avis> GetAvisByConducId(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+           DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -162,7 +143,7 @@ namespace BackOnWay.Repository.Visiteur
                 listeAvis.Add(unAvis);
             }
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return listeAvis;
         }

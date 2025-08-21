@@ -4,22 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Passager
 {
-    public class HistoriqueCovoitRepo : IHistoriqueCovoitRepo
+    public class HistoriqueCovoitRepo : Connexion,  IHistoriqueCovoitRepo
     {
-        private readonly SqlConnection _connexion;
-
-        public HistoriqueCovoitRepo()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public List<Covoiturages> GetAllCovoitByUtilId(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -60,7 +49,7 @@ namespace BackOnWay.Repository.Utilisateur.Passager
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return listeCovoits;
         }

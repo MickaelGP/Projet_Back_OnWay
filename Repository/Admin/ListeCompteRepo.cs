@@ -5,27 +5,11 @@ using System.Data;
 
 namespace BackOnWay.Repository.Admin
 {
-    public class ListeCompteRepo
+    public class ListeCompteRepo : Connexion
     {
-        private SqlConnection _connexion;
-
-        public ListeCompteRepo()
-        {
-            DbConnecter();
-        }
-
-        private void DbConnecter()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public List<Utilisateurs> ListeCompte()
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             List<Utilisateurs> listeUtils = new List<Utilisateurs>();
 
@@ -52,17 +36,16 @@ namespace BackOnWay.Repository.Admin
                 };
                 listeUtils.Add(unUtil);
             }
-            _connexion.Close();
+           
+            DbDeconnecter();
 
             return listeUtils;
         }
 
         public Utilisateurs SelectCompte(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
                 DbConnecter();
-            }
+            
             SqlCommand cmd = _connexion.CreateCommand();
 
             cmd.CommandText = "SELECT UtilId,  UtilPseudo, UtilNom, UtilEmail, RoleLabel, RoleId, UtilSuspendu FROM utilisateurs INNER JOIN roles ON  UtilRole = RoleId  WHERE UtilId = @UtilId";
@@ -92,7 +75,8 @@ namespace BackOnWay.Repository.Admin
 
                 };
             }
-            _connexion.Close();
+
+            DbDeconnecter();
 
             return resultat;
         }
@@ -104,11 +88,8 @@ namespace BackOnWay.Repository.Admin
         /// <returns></returns>
         public int UpdateStatut(Utilisateurs unUtil)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
                 DbConnecter();
-            }
-
+    
             SqlCommand cmd = _connexion.CreateCommand();
 
             cmd.CommandText = "UPDATE utilisateurs SET UtilSuspendu = @Suspendu WHERE UtilId = @UtilId ";
@@ -121,17 +102,14 @@ namespace BackOnWay.Repository.Admin
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int DeleteCompte(int unId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -145,17 +123,14 @@ namespace BackOnWay.Repository.Admin
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int CheckExistEmploye(string unEmail)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                DbConnecter();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -167,17 +142,14 @@ namespace BackOnWay.Repository.Admin
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public int InsertEmploye(AddEmployeDto unEmploye)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
                 DbConnecter();
-            }
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -207,7 +179,7 @@ namespace BackOnWay.Repository.Admin
 
             int resultat = cmd.ExecuteNonQuery();
 
-            _connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }

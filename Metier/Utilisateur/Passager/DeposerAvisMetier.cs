@@ -1,8 +1,8 @@
 ﻿using BackOnWay.Dtos.Utilisateur.Passager;
-using BackOnWay.Metier.Utilisateur.Passager;
 using BackOnWay.Models;
+using BackOnWay.Repository.Utilisateur.Passager;
 
-namespace BackOnWay.Repository.Utilisateur.Passager
+namespace BackOnWay.Metier.Utilisateur.Passager
 {
     public class DeposerAvisMetier : IDeposerAvisMetier
     {

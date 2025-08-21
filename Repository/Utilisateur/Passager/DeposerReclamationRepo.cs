@@ -4,22 +4,11 @@ using Microsoft.Data.SqlClient;
 
 namespace BackOnWay.Repository.Utilisateur.Passager
 {
-    public class DeposerReclamationRepo : IDeposerReclamationRepo
+    public class DeposerReclamationRepo : Connexion , IDeposerReclamationRepo
     {
-        private readonly SqlConnection _connexion;
-
-        public DeposerReclamationRepo()
-        {
-            Connexion maConnexion = new Connexion();
-            _connexion = maConnexion.GetConnection();
-        }
-
         public int CheckIfPlainteExist(int unUtilId, int unCovoitId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -33,17 +22,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
 
             int resultat = (int)cmd.ExecuteScalar();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return resultat;
         }
 
         public Reservations GetInfoResa(int unUtilId, int unCovoitId)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -75,17 +61,14 @@ namespace BackOnWay.Repository.Utilisateur.Passager
             }
             reader.Close();
 
-            this._connexion.Close();
+            DbDeconnecter();
 
             return reservation;
         }
 
         public int InsertPlaintes(Plaintes unPlainte)
         {
-            if (_connexion == null || _connexion.State == ConnectionState.Closed)
-            {
-                _connexion.Open();
-            }
+            DbConnecter();
 
             SqlCommand cmd = _connexion.CreateCommand();
 
@@ -100,6 +83,8 @@ namespace BackOnWay.Repository.Utilisateur.Passager
             PlainteResa.Value = unPlainte.PlainteResa;
 
             int resultat = cmd.ExecuteNonQuery();
+
+            DbDeconnecter();
 
             return resultat;
         }
