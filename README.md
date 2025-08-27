@@ -88,12 +88,12 @@ cd Projet_Back_OnWay
     "DbConnectionString": "Vôtre chaine de connexion"
   },
   "SmtpSettings": {
-    "Host": "Votre haute",
+    "Host": "Votre hôte",
     "Port": Le port du serveur,
     "Username": "nom d'utilisateur",
     "Password": "mot de passe",
-    "FromName": "un Nom",
-    "FromEmail": "une adresse email"
+    "FromName": "Nom",
+    "FromEmail": "adresse@email.com"
   },
 }
 ```
