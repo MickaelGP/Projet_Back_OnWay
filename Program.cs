@@ -24,17 +24,27 @@ builder.Services.AddScoped<IUpdateCovoitMetier, UpdateCovoitMetier>();
 builder.Services.AddControllers();
 
 // CORS pour autoriser Next.js (http://localhost:3000) avec cookies
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowNextJsLocalhost", policy =>
+//    {
+//        policy.WithOrigins("http://localhost:3000")
+//              .AllowCredentials()
+//              .AllowAnyHeader()
+//              .AllowAnyMethod();
+//    });
+//});
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowNextJsLocalhost", policy =>
-    {
-        policy.WithOrigins("http://localhost:3000")
-              .AllowCredentials()
-              .AllowAnyHeader()
-              .AllowAnyMethod();
-    });
+    options.AddDefaultPolicy(
+        policy =>
+        {
+            policy.AllowAnyOrigin()
+                  .AllowCredentials()
+                  .AllowAnyMethod()
+                  .AllowAnyHeader();
+        });
 });
-
 // Swagger (si besoin)
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -51,7 +61,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // CORS doit être avant Authorization/Middleware
-app.UseCors("AllowNextJsLocalhost");
+//app.UseCors("AllowNextJsLocalhost");
 
 app.UseMiddleware<SessionMiddleware>();
 app.UseAuthorization();

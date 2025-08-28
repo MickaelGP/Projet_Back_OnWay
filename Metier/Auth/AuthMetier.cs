@@ -18,6 +18,12 @@ namespace BackOnWay.Metier.Auth
             {
                 return new ConnexionInfoDto { MessageErreur = "Utilisateur introuvable" };
             }
+            else
+            {
+                if (infoUtil.UtilSuspendu == true) {
+                    return new ConnexionInfoDto { MessageErreur = "Vôtre compte à été suspendu" };
+                }
+            }
 
             string hashMdp = infoUtil.UtilMdp;
             ConnexionInfoDto? reponse = null;

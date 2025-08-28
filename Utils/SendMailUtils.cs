@@ -113,5 +113,38 @@ namespace BackOnWay.Utils
             }
             ;
         }
+
+        public void SendEmailCompteSuspendu(string unNom, string unEmail)
+        {
+            message.From.Add(new MailboxAddress(this._smtpSettings.FromName, this._smtpSettings.FromEmail));
+            message.Subject = "Compte suspendu";
+            message.To.Add(new MailboxAddress(unNom, unEmail));
+
+            message.Body = new TextPart("html")
+            {
+                Text = $@"
+                        <html>
+                            <body>
+                                <h1>Bonjour :  {unNom}</h1>
+                                <p> Votre compte vient d'être suspendu suite à un litige.</p>
+                                <p>Merci de nous contacter afin de régler la situation.</p>
+                                <p>Cordialement<p>
+                                <p>L'équipe OnWay<p>
+                            </body>
+                        </html>
+                    "
+            };
+
+            using (var client = new SmtpClient())
+            {
+                client.Connect(this._smtpSettings.Host, this._smtpSettings.Port, true);
+
+                client.Authenticate(this._smtpSettings.Username, _smtpSettings.Password);
+
+                client.Send(message);
+
+                client.Disconnect(true);
+            }
+        }
     }
 }

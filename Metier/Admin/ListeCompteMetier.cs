@@ -1,13 +1,19 @@
 ﻿using BackOnWay.Dtos.Admin;
 using BackOnWay.Models;
 using BackOnWay.Repository.Admin;
+using BackOnWay.Utils;
 
 namespace BackOnWay.Metier.Admin
 {
     public class ListeCompteMetier
     {
+       
         private ListeCompteRepo _repository = new ListeCompteRepo();
 
+        /// <summary>
+        /// Récupère une liste d'utilisateurs
+        /// </summary>
+        /// <returns>Renvoie une liste d'utilisateurs</returns>
         public List<UtilisateurDto> GetListeCompte()
         {
             List<Utilisateurs> utilisateurs = _repository.ListeCompte();
@@ -29,6 +35,12 @@ namespace BackOnWay.Metier.Admin
 
             return listeUtilisateurs;
         }
+
+        /// <summary>
+        /// Récupère les informations d'un compte
+        /// </summary>
+        /// <param name="unId">Identifiant de l'utilisateur à recherché</param>
+        /// <returns>Les informations sur le compte</returns>
         public UtilisateurDto InfoCompte(int unId)
         {
             Utilisateurs compteInfos = _repository.SelectCompte(unId);
@@ -67,15 +79,30 @@ namespace BackOnWay.Metier.Admin
             int resultatModif = _repository.UpdateStatut(util);
 
             bool resultat;
-            if (resultatModif > 0)
+            if (resultatModif > 0 && util.UtilSuspendu == true)
             {
-                // "Modification effectuée avec succès !";
+                Utilisateurs unCompte = _repository.SelectCompte(unUtil.UtilId);
+
+                _repository.InvalideSession(unCompte.UtilId, false);
+
+                SendMailUtils unEmail = new SendMailUtils();
+
+                unEmail.SendEmailCompteSuspendu(unCompte.UtilNom, unCompte.UtilEmail);
+
                 resultat = true;
             }
             else
             {
-                // "Une erreur c'est produite lors de la mise à jour du statut de l'utilisateur.";
-                resultat = false;
+                if(resultatModif > 0)
+                {
+                    // "Modification effectuée avec succès !";
+                    resultat = true;
+                }
+                else
+                {
+                    // "Une erreur c'est produite lors de la mise à jour du statut de l'utilisateur.";
+                    resultat = false;
+                }
             }
             return resultat;
         }

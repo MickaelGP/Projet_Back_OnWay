@@ -13,7 +13,7 @@ namespace BackOnWay.Repository.Auth
 
             SqlCommand cmd = _connexion.CreateCommand();
 
-            cmd.CommandText = "SELECT UtilId, UtilEmail, UtilMdp, RoleLabel FROM utilisateurs " +
+            cmd.CommandText = "SELECT UtilId, UtilEmail, UtilMdp, RoleLabel, UtilSuspendu FROM utilisateurs " +
                 "INNER JOIN roles ON UtilRole = RoleId WHERE UtilEmail = @UtilEmail";
 
             SqlParameter UtilEmail = cmd.Parameters.Add("@UtilEmail", SqlDbType.VarChar);
@@ -29,6 +29,7 @@ namespace BackOnWay.Repository.Auth
                     UtilId = (int)reader["UtilId"],
                     UtilEmail = reader["UtilEmail"].ToString(),
                     UtilMdp = reader["UtilMdp"].ToString(),
+                    UtilSuspendu = (bool)reader["UtilSuspendu"],
                     Roles = new Roles()
                     {
                         RoleLabel = reader["RoleLabel"].ToString()

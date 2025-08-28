@@ -26,7 +26,13 @@ namespace BackOnWay.Controllers.Auth
                             Detail = "Aucun compte n'existe.",
                             Status = StatusCodes.Status404NotFound
                         });
-
+                    case "Vôtre compte à été suspendu":
+                        return Unauthorized(new ProblemDetails
+                        {
+                            Title = "Compte suspendu",
+                            Detail = "Vôtre compte à été suspendu",
+                            Status = StatusCodes.Status401Unauthorized
+                        });
                     case "Mot de passe incorrect":
                         return Unauthorized(new ProblemDetails
                         {

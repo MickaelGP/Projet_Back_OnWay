@@ -106,7 +106,26 @@ namespace BackOnWay.Repository.Admin
 
             return resultat;
         }
+        public int InvalideSession(int unId, bool validSession)
+        {
+            DbConnecter();
 
+            SqlCommand cmd = _connexion.CreateCommand();
+
+            cmd.CommandText = "UPDATE sessions SET SessionActive = @SessionActive WHERE SessionUtil = @SessionUtil";
+
+            SqlParameter SessionActive = cmd.Parameters.Add("SessionActive", SqlDbType.Bit);
+            SqlParameter SessionUtil = cmd.Parameters.Add("SessionUtil", SqlDbType.Int);
+
+            SessionActive.Value = validSession;
+            SessionUtil.Value = unId;
+
+            int resultat = cmd.ExecuteNonQuery();
+
+            DbDeconnecter();
+
+            return resultat;
+        }
         public int DeleteCompte(int unId)
         {
             DbConnecter();
